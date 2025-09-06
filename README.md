@@ -1,2 +1,2 @@
-# cesar-poo
+# Rate My Class
 java project @cesarschool
