@@ -17,7 +17,7 @@ No **Trello** você encontra as **Histórias de Usuário (HUs)**, além do acomp
 ---
 
 ### Figma
-<a href="https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=0-1&p=f&t=woHAook4qDLeQWmz-0">
+<a href="https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=13-12205&p=f&t=HfrxX5qF0bMNlxau-0">
   <img align="center" alt="Figma" height="30" width="40" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg">
 </a>  
 
