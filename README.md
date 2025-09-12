@@ -26,7 +26,7 @@ No **Figma** estão disponíveis os **protótipos e telas do sistema**, servindo
 ---
 
 ### YouTube
-<a href="https://www.youtube.com/SEU_LINK_AQUI">
+<a href="https://youtu.be/bTy5LQIfXJw?si=_qeF84S4VDrcQJFO">
   <img align="center" alt="YouTube" height="30" width="40" src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
 </a>  
 
