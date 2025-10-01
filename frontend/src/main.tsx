@@ -3,8 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
-import { store } from '@store/index';
-import { theme } from '@/styles/theme';
+import { store } from './store/index';
+import { theme } from './styles/theme';
+import { AuthProvider } from './hooks/useAuth';
 import App from './App';
 import './styles/globals.css';
 
@@ -20,7 +21,9 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <ConfigProvider theme={theme}>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </ConfigProvider>
       </BrowserRouter>
     </Provider>
