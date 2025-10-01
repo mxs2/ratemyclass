@@ -17,10 +17,30 @@ const RegisterPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      await register(values);
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      
+      // Remove confirmPassword field before sending to API
+      const { confirmPassword, ...registerData } = values;
+      
+      // Register user (auto-login after successful registration)
+      await register(registerData);
+      
+      // Redirect to dashboard after successful registration
+      navigate('/dashboard', { 
+        state: { message: 'Welcome to RateMyClass! Your account has been created successfully.' } 
+      });
+    } catch (err: any) {
+      // Handle validation errors from backend
+      if (err.response?.data?.fieldErrors) {
+        const backendErrors = err.response.data.fieldErrors;
+        form.setFields(
+          Object.entries(backendErrors).map(([field, message]) => ({
+            name: field,
+            errors: [message as string],
+          }))
+        );
+      } else {
+        setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -42,9 +62,12 @@ const RegisterPage: React.FC = () => {
 
         {error && (
           <Alert
-            message={error}
+            message="Registration Failed"
+            description={error}
             type="error"
             showIcon
+            closable
+            onClose={() => setError(null)}
             style={{ marginBottom: 16 }}
           />
         )}
@@ -70,12 +93,29 @@ const RegisterPage: React.FC = () => {
             />
           </Form.Item>
 
+          <Form.Item
+            name="studentId"
+            label="Student ID"
+            rules={[
+              { required: true, message: 'Please enter your student ID!' },
+              { max: 20, message: 'Student ID cannot exceed 20 characters!' }
+            ]}
+          >
+            <Input 
+              placeholder="e.g., ST12345678"
+              size="large"
+            />
+          </Form.Item>
+
           <div style={{ display: 'flex', gap: '12px' }}>
             <Form.Item
               name="firstName"
               label="First Name"
               style={{ flex: 1 }}
-              rules={[{ required: true, message: 'Please enter your first name!' }]}
+              rules={[
+                { required: true, message: 'Please enter your first name!' },
+                { max: 100, message: 'First name cannot exceed 100 characters!' }
+              ]}
             >
               <Input 
                 prefix={<UserOutlined />} 
@@ -88,7 +128,10 @@ const RegisterPage: React.FC = () => {
               name="lastName"
               label="Last Name"
               style={{ flex: 1 }}
-              rules={[{ required: true, message: 'Please enter your last name!' }]}
+              rules={[
+                { required: true, message: 'Please enter your last name!' },
+                { max: 100, message: 'Last name cannot exceed 100 characters!' }
+              ]}
             >
               <Input 
                 placeholder="Doe"
@@ -102,12 +145,13 @@ const RegisterPage: React.FC = () => {
             label="Password"
             rules={[
               { required: true, message: 'Please enter a password!' },
-              { min: 6, message: 'Password must be at least 6 characters!' }
+              { min: 8, message: 'Password must be at least 8 characters!' },
+              { max: 255, message: 'Password cannot exceed 255 characters!' }
             ]}
           >
             <Input.Password 
               prefix={<LockOutlined />} 
-              placeholder="Password (min 6 characters)"
+              placeholder="Password (min 8 characters)"
               size="large"
             />
           </Form.Item>
@@ -135,21 +179,14 @@ const RegisterPage: React.FC = () => {
             />
           </Form.Item>
 
-          <Form.Item
-            name="university"
-            label="University (Optional)"
-          >
-            <Input 
-              placeholder="e.g., University of California, Berkeley"
-              size="large"
-            />
-          </Form.Item>
-
           <div style={{ display: 'flex', gap: '12px' }}>
             <Form.Item
               name="major"
               label="Major (Optional)"
               style={{ flex: 1 }}
+              rules={[
+                { max: 100, message: 'Major cannot exceed 100 characters!' }
+              ]}
             >
               <Input 
                 placeholder="e.g., Computer Science"
@@ -178,9 +215,9 @@ const RegisterPage: React.FC = () => {
               htmlType="submit" 
               size="large"
               loading={loading}
-              style={{ width: '100%' }}
+              block
             >
-              Create Account
+              {loading ? 'Creating your account...' : 'Create Account'}
             </Button>
           </Form.Item>
         </Form>
