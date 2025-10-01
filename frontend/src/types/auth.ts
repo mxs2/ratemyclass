@@ -1,12 +1,14 @@
 export interface User {
   id: number;
-  email: string;
   firstName: string;
   lastName: string;
-  role: 'STUDENT' | 'ADMIN';
-  university?: string;
+  email: string;
+  studentId: string;
   major?: string;
   graduationYear?: number;
+  role: 'STUDENT' | 'PROFESSOR' | 'ADMIN';
+  enabled: boolean;
+  emailVerified: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,18 +19,20 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  email: string;
-  password: string;
   firstName: string;
   lastName: string;
-  university?: string;
+  email: string;
+  studentId: string;
+  password: string;
   major?: string;
   graduationYear?: number;
 }
 
 export interface AuthResponse {
   token: string;
+  tokenType: string;
   user: User;
+  expiresIn: number;
 }
 
 export interface TokenPayload {
