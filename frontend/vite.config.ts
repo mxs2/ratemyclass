@@ -1,20 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
-      '@components': resolve(__dirname, './src/components'),
-      '@pages': resolve(__dirname, './src/pages'),
-      '@services': resolve(__dirname, './src/services'),
-      '@store': resolve(__dirname, './src/store'),
-      '@types': resolve(__dirname, './src/types'),
-      '@utils': resolve(__dirname, './src/utils'),
-      '@hooks': resolve(__dirname, './src/hooks'),
-      '@assets': resolve(__dirname, './src/assets'),
+      '@': path.resolve(process.cwd(), './src'),
+      '@components': path.resolve(process.cwd(), './src/components'),
+      '@pages': path.resolve(process.cwd(), './src/pages'),
+      '@services': path.resolve(process.cwd(), './src/services'),
+      '@store': path.resolve(process.cwd(), './src/store'),
+      '@types': path.resolve(process.cwd(), './src/types'),
+      '@utils': path.resolve(process.cwd(), './src/utils'),
+      '@hooks': path.resolve(process.cwd(), './src/hooks'),
+      '@assets': path.resolve(process.cwd(), './src/assets'),
     },
   },
   server: {
@@ -40,10 +40,5 @@ export default defineConfig({
         },
       },
     },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
   },
 })
