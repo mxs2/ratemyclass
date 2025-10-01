@@ -155,6 +155,8 @@ ratemyclass/
 ├── scripts/                 # Startup and utility scripts
 │   ├── start.sh/.bat        # Cross-platform start scripts
 │   ├── stop.sh/.bat         # Cross-platform stop scripts
+│   ├── logs/                # Application log files
+│   ├── pids/                # Process ID files
 │   └── README.md            # Scripts documentation
 └── README.md               # Project documentation
 ```
