@@ -1,0 +1,20 @@
+# Development Dockerfile for backend with hot reload
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven curl && rm -rf /var/lib/apt/lists/*
+
+# Copy pom.xml and download dependencies
+COPY backend/pom.xml ./
+RUN mvn dependency:go-offline -B
+
+# Copy source code
+COPY backend/src ./src
+
+# Expose ports (app and debug)
+EXPOSE 8080 5005
+
+# Run with debug enabled and auto-restart
+CMD ["mvn", "spring-boot:run", "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"]
