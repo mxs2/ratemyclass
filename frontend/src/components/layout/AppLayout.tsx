@@ -11,6 +11,30 @@ interface AppLayoutProps {
   children: ReactNode;
 }
 
+// Main menu items - defined outside component for better performance
+const mainMenuItems: MenuProps['items'] = [
+  {
+    key: '/',
+    icon: <HomeOutlined />,
+    label: <Link to="/">Home</Link>,
+  },
+  {
+    key: '/professors',
+    icon: <UserOutlined />,
+    label: <Link to="/professors">Professors</Link>,
+  },
+  {
+    key: '/courses',
+    icon: <BookOutlined />,
+    label: <Link to="/courses">Courses</Link>,
+  },
+  {
+    key: '/search',
+    icon: <SearchOutlined />,
+    label: <Link to="/search">Search</Link>,
+  },
+];
+
 const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -21,6 +45,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     navigate('/');
   };
 
+  // User menu items - needs to be inside component to access navigate and handleLogout
   const userMenuItems: MenuProps['items'] = [
     {
       key: 'profile',
@@ -33,29 +58,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       icon: <LogoutOutlined />,
       label: 'Logout',
       onClick: handleLogout,
-    },
-  ];
-
-  const mainMenuItems: MenuProps['items'] = [
-    {
-      key: '/',
-      icon: <HomeOutlined />,
-      label: <Link to="/">Home</Link>,
-    },
-    {
-      key: '/professors',
-      icon: <UserOutlined />,
-      label: <Link to="/professors">Professors</Link>,
-    },
-    {
-      key: '/courses',
-      icon: <BookOutlined />,
-      label: <Link to="/courses">Courses</Link>,
-    },
-    {
-      key: '/search',
-      icon: <SearchOutlined />,
-      label: <Link to="/search">Search</Link>,
     },
   ];
 
