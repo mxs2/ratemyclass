@@ -1,0 +1,64 @@
+# Docker Compose for Development
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: ratemyclass-db-dev
+    environment:
+      POSTGRES_DB: ratemyclass_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - ratemyclass-dev-network
+
+  # Redis for development
+  redis:
+    image: redis:7-alpine
+    container_name: ratemyclass-redis-dev
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - ratemyclass-dev-network
+
+  # Backend (development mode with hot reload)
+  backend-dev:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile.dev
+    container_name: ratemyclass-backend-dev
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DATABASE_URL: jdbc:postgresql://database:5432/ratemyclass_dev
+      JWT_SECRET: mySecretKey123456789012345678901234567890
+      CORS_ALLOWED_ORIGINS: http://localhost:3000
+    ports:
+      - "8081:8080"
+      - "5005:5005"  # Debug port
+    volumes:
+      - ../backend/src:/app/src
+      - ../backend/target:/app/target
+    depends_on:
+      - database
+    networks:
+      - ratemyclass-dev-network
+    profiles:
+      - dev-backend
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+
+networks:
+  ratemyclass-dev-network:
+    driver: bridge
