@@ -38,6 +38,35 @@ A modern web application for students to rate and review professors and courses 
 
 ## 🚀 Quick Start
 
+### Using the Startup Scripts (Recommended)
+
+The easiest way to run the project is using our cross-platform startup scripts:
+
+**Windows:**
+```cmd
+# Navigate to the project folder
+cd ratemyclass
+scripts\start.bat
+```
+
+**Linux/macOS:**
+```bash
+# Navigate to the project folder
+cd ratemyclass
+./scripts/start.sh
+```
+
+The scripts will:
+- Check prerequisites and port availability
+- Start Docker services (PostgreSQL & Redis)
+- Install frontend dependencies
+- Start backend and frontend servers
+- Provide status information and troubleshooting
+
+See `scripts/SCRIPTS_README.md` for detailed information.
+
+### Manual Setup
+
 ### Prerequisites
 - Java 21 or higher
 - Node.js 18+ and npm
@@ -80,6 +109,7 @@ A modern web application for students to rate and review professors and courses 
 
 1. **Run everything with Docker Compose**
    ```bash
+   cd docker
    docker-compose up -d
    ```
 
@@ -118,8 +148,14 @@ ratemyclass/
 │   ├── public/             # Static assets
 │   └── package.json        # npm dependencies
 ├── .github/workflows/       # CI/CD pipelines
-├── docker-compose.yml       # Production Docker setup
-├── docker-compose.dev.yml   # Development Docker setup
+├── docker/                  # Docker configuration
+│   ├── docker-compose.yml       # Production Docker setup
+│   ├── docker-compose.dev.yml   # Development Docker setup
+│   └── README.md            # Docker documentation
+├── scripts/                 # Startup and utility scripts
+│   ├── start.sh/.bat        # Cross-platform start scripts
+│   ├── stop.sh/.bat         # Cross-platform stop scripts
+│   └── README.md            # Scripts documentation
 └── README.md               # Project documentation
 ```
 
