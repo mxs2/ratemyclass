@@ -105,11 +105,11 @@ CREATE INDEX idx_course_prerequisites_course ON course_prerequisites(course_id);
 -- Create ratings table
 CREATE TABLE ratings (
     id BIGSERIAL PRIMARY KEY,
-    overall_rating DECIMAL(2,1) NOT NULL CHECK (overall_rating >= 1.0 AND overall_rating <= 5.0),
-    teaching_quality DECIMAL(2,1) CHECK (teaching_quality >= 1.0 AND teaching_quality <= 5.0),
-    difficulty DECIMAL(2,1) CHECK (difficulty >= 1.0 AND difficulty <= 5.0),
-    workload DECIMAL(2,1) CHECK (workload >= 1.0 AND workload <= 5.0),
-    clarity DECIMAL(2,1) CHECK (clarity >= 1.0 AND clarity <= 5.0),
+    overall_rating DOUBLE PRECISION NOT NULL CHECK (overall_rating >= 1.0 AND overall_rating <= 5.0),
+    teaching_quality DOUBLE PRECISION CHECK (teaching_quality >= 1.0 AND teaching_quality <= 5.0),
+    difficulty DOUBLE PRECISION CHECK (difficulty >= 1.0 AND difficulty <= 5.0),
+    workload DOUBLE PRECISION CHECK (workload >= 1.0 AND workload <= 5.0),
+    clarity DOUBLE PRECISION CHECK (clarity >= 1.0 AND clarity <= 5.0),
     review_text TEXT CHECK (LENGTH(review_text) <= 2000),
     would_take_again BOOLEAN NOT NULL DEFAULT FALSE,
     is_anonymous BOOLEAN NOT NULL DEFAULT FALSE,

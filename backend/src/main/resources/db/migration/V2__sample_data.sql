@@ -173,16 +173,16 @@ INSERT INTO ratings (overall_rating, teaching_quality, difficulty, workload, cla
 
 -- Ratings for PHYS101 with James Anderson
 (4.4, 4.6, 3.8, 3.5, 4.5, 'Professor Anderson makes physics interesting and relatable. Great use of demonstrations in class.', true, false, 'Fall', 2023, 3, 8, 12),
-(4.1, 4.3, 4.1, 3.8, 4.0, 'Solid physics course. The lab component is well-integrated with lectures.', true, false, 'Spring', 2024, 3, 8, 12),
+(4.1, 4.3, 4.1, 3.8, 4.0, 'Solid physics course. The lab component is well-integrated with lectures.', true, false, 'Spring', 2024, 4, 8, 12),
 
 -- Ratings for CHEM101 with Christopher Jackson
 (3.7, 3.9, 4.5, 4.2, 3.5, 'Challenging course with a lot of material to cover. Professor Jackson is knowledgeable but moves quickly.', false, true, 'Fall', 2023, 5, 11, 16),
-(4.0, 4.2, 4.3, 4.0, 3.8, 'Comprehensive chemistry course. Be prepared for a heavy workload but you will learn a lot.', true, false, 'Spring', 2024, 5, 11, 16),
+(4.0, 4.2, 4.3, 4.0, 3.8, 'Comprehensive chemistry course. Be prepared for a heavy workload but you will learn a lot.', true, false, 'Spring', 2024, 3, 11, 16),
 
 -- Ratings for BIO101 with Matthew Thompson
 (4.5, 4.7, 3.2, 3.0, 4.6, 'Excellent introduction to biology. Professor Thompson is passionate about the subject and it shows.', true, false, 'Fall', 2023, 6, 15, 22),
-(4.3, 4.5, 3.5, 3.3, 4.4, 'Great course for biology majors. The labs are particularly well-designed and informative.', true, false, 'Spring', 2024, 6, 15, 22),
+(4.3, 4.5, 3.5, 3.3, 4.4, 'Great course for biology majors. The labs are particularly well-designed and informative.', true, false, 'Spring', 2024, 2, 15, 22),
 
 -- Ratings for ENG101 with Daniel Harris
 (4.1, 4.3, 3.6, 3.8, 4.0, 'Good introduction to engineering principles. Professor Harris brings industry experience to the classroom.', true, false, 'Fall', 2023, 4, 13, 19),
-(3.9, 4.1, 3.9, 4.1, 3.7, 'Practical course with real-world applications. Some lectures could be more engaging.', true, false, 'Spring', 2024, 4, 13, 19);
+(3.9, 4.1, 3.9, 4.1, 3.7, 'Practical course with real-world applications. Some lectures could be more engaging.', true, false, 'Spring', 2024, 1, 13, 19);

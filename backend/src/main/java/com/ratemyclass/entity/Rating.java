@@ -23,27 +23,27 @@ public class Rating {
 
     @DecimalMin(value = "1.0", message = "Overall rating must be at least 1.0")
     @DecimalMax(value = "5.0", message = "Overall rating must be at most 5.0")
-    @Column(nullable = false, precision = 2, scale = 1)
+    @Column(nullable = false)
     private Double overallRating;
 
     @DecimalMin(value = "1.0")
     @DecimalMax(value = "5.0")
-    @Column(precision = 2, scale = 1)
+    @Column
     private Double teachingQuality;
 
     @DecimalMin(value = "1.0")
     @DecimalMax(value = "5.0")
-    @Column(precision = 2, scale = 1)
+    @Column
     private Double difficulty;
 
     @DecimalMin(value = "1.0")
     @DecimalMax(value = "5.0")
-    @Column(precision = 2, scale = 1)
+    @Column
     private Double workload;
 
     @DecimalMin(value = "1.0")
     @DecimalMax(value = "5.0")
-    @Column(precision = 2, scale = 1)
+    @Column
     private Double clarity;
 
     @Size(max = 2000, message = "Review text cannot exceed 2000 characters")
