@@ -376,7 +376,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Trello Board](https://trello.com/invite/b/68bc9a1653c4b185e984020e/ATTI63ea9e3314d386b2e6071f44e4dd5b1e73956C78/transparecesar) - Project management and user stories
 - [Figma Design](https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=13-12205&p=f&t=HfrxX5qF0bMNlxau-0) - UI/UX prototypes
-- [YouTube Demo](https://youtu.be/bTy5LQIfXJw?si=_qeF84S4VDrcQJFO) - Project presentation
+- [YouTube](https://youtu.be/bTy5LQIfXJw?si=_qeF84S4VDrcQJFO) - Project presentation (Entrega 1)
+- [YouTube](https://youtu.be/IOHdonVIenQ) - Project presentation (Entrega 2)
 
 ## 🆘 Support
 
