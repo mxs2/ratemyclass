@@ -1,6 +1,11 @@
 @echo off
 REM RateMyClass Project Start Script for Windows
 REM This script starts all services needed for the RateMyClass application
+REM
+REM Enhanced features:
+REM - Checks if required ports (3000, 8080, 5433, 6380) are available
+REM - Provides helpful guidance if ports are in use
+REM - Suggests running stop.bat to clear ports automatically
 
 echo 🚀 Starting RateMyClass Application
 echo ==================================
@@ -22,6 +27,55 @@ if %errorlevel% neq 0 (
 )
 
 echo 📋 Checking prerequisites...
+
+REM Function to check if port is in use
+REM Usage: call :check_port PORT_NUMBER
+:check_port
+setlocal
+set "port=%1"
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":%port% "') do (
+    echo ⚠️  Port %port% is already in use. Please stop the service using that port.
+    endlocal & set "port_check_result=false"
+    goto :eof
+)
+endlocal & set "port_check_result=true"
+goto :eof
+
+REM Check required ports
+set "ports_ok=true"
+
+call :check_port 8080
+if "%port_check_result%"=="false" (
+    echo    Backend port 8080 is in use
+    set "ports_ok=false"
+)
+
+call :check_port 3000
+if "%port_check_result%"=="false" (
+    echo    Frontend port 3000 is in use
+    set "ports_ok=false"
+)
+
+call :check_port 5433
+if "%port_check_result%"=="false" (
+    echo    Database port 5433 is in use
+    set "ports_ok=false"
+)
+
+call :check_port 6380
+if "%port_check_result%"=="false" (
+    echo    Redis port 6380 is in use
+    set "ports_ok=false"
+)
+
+if "%ports_ok%"=="false" (
+    echo ❌ Some required ports are in use. Please stop those services first.
+    echo.
+    echo 💡 Quick fix: Run 'stop.bat' to automatically stop services on these ports
+    echo    Or manually check what's using these ports with: netstat -ano ^| findstr :PORT_NUMBER
+    pause
+    exit /b 1
+)
 
 REM Check if Node.js is installed
 node --version >nul 2>&1

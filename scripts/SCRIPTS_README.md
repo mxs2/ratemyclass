@@ -47,6 +47,7 @@ chmod +x start.sh stop.sh
 1. **Checks Prerequisites**
    - Verifies Docker is running
    - Checks if required ports are available (3000, 8080, 5433, 6380)
+   - Provides helpful guidance if ports are in use
    - Ensures Node.js and npm are installed
 
 2. **Starts Services**
@@ -94,18 +95,39 @@ tail -f logs/frontend.log
 ## Troubleshooting
 
 ### Port Already in Use
-If you get port conflicts, check what's using the ports:
+If you get port conflicts, the **easiest solution** is to run the stop script:
+
+**Windows:**
+```cmd
+stop.bat
+```
+
+**Linux/macOS:**
+```bash
+./stop.sh
+```
+
+The stop scripts will automatically:
+- Find and stop processes using ports 3000, 8080, 5433, 6380
+- Verify that all ports are clear
+- Provide detailed feedback on what was stopped
+
+For manual troubleshooting, check what's using the ports:
 
 **Windows:**
 ```cmd
 netstat -ano | findstr :8080
 netstat -ano | findstr :3000
+netstat -ano | findstr :5433
+netstat -ano | findstr :6380
 ```
 
 **Linux/macOS:**
 ```bash
 lsof -i :8080
 lsof -i :3000
+lsof -i :5433
+lsof -i :6380
 ```
 
 ### Docker Issues

@@ -56,6 +56,9 @@ fi
 
 if [ "$PORTS_OK" = false ]; then
     echo "❌ Some required ports are in use. Please stop those services first."
+    echo ""
+    echo "💡 Quick fix: Run './stop.sh' to automatically stop services on these ports"
+    echo "   Or manually check what's using these ports with: lsof -i :PORT_NUMBER"
     exit 1
 fi
 
