@@ -90,32 +90,32 @@ if ! command -v npm &> /dev/null; then
 fi
 
 # Install frontend dependencies if needed
-if [ ! -d "frontend/node_modules" ]; then
+if [ ! -d "../frontend/node_modules" ]; then
     echo "📦 Installing frontend dependencies..."
-    cd frontend
+    cd ../frontend
     npm install
-    cd ..
+    cd ../scripts
 fi
 
 # Function to start backend
 start_backend() {
     echo "🔧 Starting backend server..."
-    cd backend
-    ./mvnw spring-boot:run > ../backend.log 2>&1 &
+    cd ../backend
+    ./mvnw spring-boot:run > ../scripts/logs/backend.log 2>&1 &
     BACKEND_PID=$!
-    echo $BACKEND_PID > ../backend.pid
-    cd ..
+    echo $BACKEND_PID > ../scripts/pids/backend.pid
+    cd ../scripts
     echo "   Backend starting... (PID: $BACKEND_PID)"
 }
 
 # Function to start frontend
 start_frontend() {
     echo "⚛️  Starting frontend server..."
-    cd frontend
-    npm run dev > ../frontend.log 2>&1 &
+    cd ../frontend
+    npm run dev > ../scripts/logs/frontend.log 2>&1 &
     FRONTEND_PID=$!
-    echo $FRONTEND_PID > ../frontend.pid
-    cd ..
+    echo $FRONTEND_PID > ../scripts/pids/frontend.pid
+    cd ../scripts
     echo "   Frontend starting... (PID: $FRONTEND_PID)"
 }
 
@@ -158,8 +158,8 @@ echo "Database: localhost:5433"
 echo "Redis:    localhost:6380"
 echo ""
 echo "📝 Logs:"
-echo "Backend:  tail -f backend.log"
-echo "Frontend: tail -f frontend.log"
+echo "Backend:  tail -f logs/backend.log"
+echo "Frontend: tail -f logs/frontend.log"
 echo ""
 echo "🛑 To stop all services, run: ./stop.sh"
 echo ""

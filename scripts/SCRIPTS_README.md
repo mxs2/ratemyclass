@@ -74,21 +74,21 @@ After starting, the application will be available at:
 
 The scripts create log files for debugging:
 
-- `backend.log` - Spring Boot application logs
-- `frontend.log` - React development server logs
+- `logs/backend.log` - Spring Boot application logs
+- `logs/frontend.log` - React development server logs
 
 ### Viewing Logs
 
 **Windows:**
 ```cmd
-type backend.log
-type frontend.log
+type logs\backend.log
+type logs\frontend.log
 ```
 
 **Linux/macOS:**
 ```bash
-tail -f backend.log
-tail -f frontend.log
+tail -f logs/backend.log
+tail -f logs/frontend.log
 ```
 
 ## Troubleshooting
@@ -177,7 +177,7 @@ This uses the production Docker Compose configuration with optimized builds.
 
 If you encounter issues:
 
-1. Check the logs in `backend.log` and `frontend.log`
+1. Check the logs in `logs/backend.log` and `logs/frontend.log`
 2. Ensure all prerequisites are installed
 3. Try the manual startup steps
 4. Restart Docker Desktop

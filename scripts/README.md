@@ -9,6 +9,8 @@ This folder contains cross-platform scripts to easily start and stop the RateMyC
 - `stop.sh` - Linux/macOS shutdown script
 - `stop.bat` - Windows shutdown script
 - `SCRIPTS_README.md` - Detailed documentation and troubleshooting
+- `logs/` - Application log files (backend.log, frontend.log)
+- `pids/` - Process ID files for running services
 
 ## Quick Usage
 

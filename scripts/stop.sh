@@ -35,10 +35,10 @@ stop_service() {
 }
 
 # Stop backend
-stop_service "Backend" "backend.pid"
+stop_service "Backend" "pids/backend.pid"
 
 # Stop frontend
-stop_service "Frontend" "frontend.pid"
+stop_service "Frontend" "pids/frontend.pid"
 
 # Stop Docker services
 echo "🐳 Stopping Docker services..."
@@ -48,7 +48,7 @@ docker-compose -f ../docker/docker-compose.dev.yml down
 read -p "🗑️  Do you want to remove log files? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    rm -f backend.log frontend.log
+    rm -f logs/backend.log logs/frontend.log
     echo "✅ Log files removed"
 fi
 

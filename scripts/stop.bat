@@ -18,8 +18,8 @@ docker-compose -f ..\docker\docker-compose.dev.yml down
 REM Clean up log files (optional)
 set /p cleanup="🗑️  Do you want to remove log files? (y/N): "
 if /i "%cleanup%"=="y" (
-    if exist "backend.log" del "backend.log"
-    if exist "frontend.log" del "frontend.log"
+    if exist "logs\backend.log" del "logs\backend.log"
+    if exist "logs\frontend.log" del "logs\frontend.log"
     echo ✅ Log files removed
 )
 

@@ -57,18 +57,18 @@ timeout /t 3 /nobreak >nul
 echo ✅ Database should be ready
 
 REM Install frontend dependencies if needed
-if not exist "frontend\node_modules" (
+if not exist "..\frontend\node_modules" (
     echo 📦 Installing frontend dependencies...
-    cd frontend
+    cd ..\frontend
     npm install
-    cd ..
+    cd ..\scripts
 )
 
 REM Start backend
 echo 🔧 Starting backend server...
-cd backend
-start /b "Backend" cmd /c "mvnw.cmd spring-boot:run > ..\backend.log 2>&1"
-cd ..
+cd ..\backend
+start /b "Backend" cmd /c "mvnw.cmd spring-boot:run > ..\scripts\logs\backend.log 2>&1"
+cd ..\scripts
 echo    Backend starting...
 
 REM Wait a moment for backend to start
@@ -76,9 +76,9 @@ timeout /t 5 /nobreak >nul
 
 REM Start frontend
 echo ⚛️  Starting frontend server...
-cd frontend
-start /b "Frontend" cmd /c "npm run dev > ..\frontend.log 2>&1"
-cd ..
+cd ..\frontend
+start /b "Frontend" cmd /c "npm run dev > ..\scripts\logs\frontend.log 2>&1"
+cd ..\scripts
 echo    Frontend starting...
 
 REM Wait for services to start
@@ -98,8 +98,8 @@ echo Database: localhost:5433
 echo Redis:    localhost:6380
 echo.
 echo 📝 Logs:
-echo Backend:  type backend.log
-echo Frontend: type frontend.log
+echo Backend:  type logs\backend.log
+echo Frontend: type logs\frontend.log
 echo.
 echo 🛑 To stop all services, run: stop.bat
 echo.
