@@ -1,4 +1,6 @@
-import { useState, useEffect, useContext, createContext, ReactNode } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useEffect, useContext, createContext } from 'react';
+import type { ReactNode } from 'react';
 import { authApi } from '../services/api/authApi';
 import type { User, LoginRequest, RegisterRequest } from '../types/auth';
 
@@ -18,7 +20,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
