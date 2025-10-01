@@ -1,29 +1,53 @@
 import React from 'react';
-import { Card, Form, Input, Button, Typography, Alert } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Card, Form, Input, Button, Typography, Alert, Checkbox, Space, Divider } from 'antd';
+import { UserOutlined, LockOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const LoginPage: React.FC = () => {
   const [form] = Form.useForm();
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  const handleSubmit = async (values: { email: string; password: string }) => {
+  // Get return URL from query params
+  const returnUrl = searchParams.get('returnUrl') || '/dashboard';
+
+  const handleSubmit = async (values: { email: string; password: string; remember?: boolean }) => {
     try {
       setLoading(true);
       setError(null);
       await login(values);
-      navigate('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      
+      // Navigate to return URL or dashboard
+      navigate(returnUrl);
+    } catch (err: any) {
+      // Handle validation errors from backend
+      if (err.response?.data?.fieldErrors) {
+        const backendErrors = err.response.data.fieldErrors;
+        form.setFields(
+          Object.entries(backendErrors).map(([field, message]) => ({
+            name: field,
+            errors: [message as string],
+          }))
+        );
+      } else {
+        setError(err.response?.data?.message || err.message || 'Login failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const fillDemoCredentials = () => {
+    form.setFieldsValue({
+      email: 'demo@university.edu',
+      password: 'Demo123!',
+    });
   };
 
   return (
@@ -42,12 +66,37 @@ const LoginPage: React.FC = () => {
 
         {error && (
           <Alert
-            message={error}
+            message="Login Failed"
+            description={error}
             type="error"
             showIcon
+            closable
             style={{ marginBottom: 16 }}
           />
         )}
+
+        <Alert
+          message="Demo Account"
+          description={
+            <Space direction="vertical" size="small" style={{ width: '100%' }}>
+              <Text>Test the app with demo credentials:</Text>
+              <Text strong>Email: demo@university.edu</Text>
+              <Text strong>Password: Demo123!</Text>
+              <Button 
+                size="small" 
+                type="link" 
+                onClick={fillDemoCredentials}
+                style={{ padding: 0 }}
+              >
+                Click to auto-fill
+              </Button>
+            </Space>
+          }
+          type="info"
+          icon={<InfoCircleOutlined />}
+          showIcon
+          style={{ marginBottom: 16 }}
+        />
 
         <Form
           form={form}
@@ -82,15 +131,19 @@ const LoginPage: React.FC = () => {
             />
           </Form.Item>
 
+          <Form.Item name="remember" valuePropName="checked" style={{ marginBottom: 8 }}>
+            <Checkbox>Remember me for 30 days</Checkbox>
+          </Form.Item>
+
           <Form.Item>
             <Button 
               type="primary" 
               htmlType="submit" 
               size="large"
               loading={loading}
-              style={{ width: '100%' }}
+              block
             >
-              Sign In
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </Form.Item>
         </Form>
