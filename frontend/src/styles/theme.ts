@@ -171,7 +171,7 @@ export const darkTheme: ThemeConfig = {
     },
     Card: {
       ...theme.components?.Card,
-      colorBg: '#141414',
+      colorBgContainer: '#141414',
     },
     Table: {
       ...theme.components?.Table,
