@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
                   <Rate disabled defaultValue={4} style={{ fontSize: '14px' }} />
                 </div>
                 <Paragraph ellipsis={{ rows: 2 }}>
-                  "Great professor! Very clear explanations and helpful office hours. The assignments were challenging but fair."
+                  &quot;Great professor! Very clear explanations and helpful office hours. The assignments were challenging but fair.&quot;
                 </Paragraph>
               </div>
               <div>
@@ -84,7 +84,7 @@ const HomePage: React.FC = () => {
                   <Rate disabled defaultValue={5} style={{ fontSize: '14px' }} />
                 </div>
                 <Paragraph ellipsis={{ rows: 2 }}>
-                  "Amazing teacher! Made complex topics easy to understand. Highly recommend taking any class with Prof. Johnson."
+                  &quot;Amazing teacher! Made complex topics easy to understand. Highly recommend taking any class with Prof. Johnson.&quot;
                 </Paragraph>
               </div>
             </Space>

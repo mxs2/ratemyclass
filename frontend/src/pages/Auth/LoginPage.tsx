@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Form, Input, Button, Typography, Alert, Checkbox, Space, Divider } from 'antd';
+import { Card, Form, Input, Button, Typography, Alert, Checkbox, Space } from 'antd';
 import { UserOutlined, LockOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -150,7 +150,7 @@ const LoginPage: React.FC = () => {
 
         <div style={{ textAlign: 'center' }}>
           <p>
-            Don't have an account? <Link to="/register">Sign up</Link>
+            Don&apos;t have an account? <Link to="/register">Sign up</Link>
           </p>
           <p>
             <Link to="/forgot-password">Forgot your password?</Link>

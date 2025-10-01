@@ -19,6 +19,7 @@ const RegisterPage: React.FC = () => {
       setError(null);
       
       // Remove confirmPassword field before sending to API
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...registerData } = values;
       
       // Register user (auto-login after successful registration)

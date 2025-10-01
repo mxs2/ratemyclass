@@ -1,17 +1,17 @@
-import React from 'react';
 import { Layout, Menu, Avatar, Dropdown, Button, Space } from 'antd';
 import { UserOutlined, LogoutOutlined, HomeOutlined, SearchOutlined, BookOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import type { MenuProps } from 'antd';
+import type { ReactNode } from 'react';
 
 const { Header, Content, Footer } = Layout;
 
 interface AppLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+const AppLayout = ({ children }: AppLayoutProps) => {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
