@@ -8,7 +8,7 @@ spring:
     name: ratemyclass-backend
   
   datasource:
-    url: jdbc:postgresql://localhost:5432/ratemyclass
+    url: jdbc:postgresql://localhost:5433/ratemyclass_dev
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
