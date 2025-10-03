@@ -1,7 +1,6 @@
 server:
   port: 8080
-  servlet:
-    context-path: /api
+  # Removed context-path to avoid double /api/ prefix
 
 spring:
   application:
