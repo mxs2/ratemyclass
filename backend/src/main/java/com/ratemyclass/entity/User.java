@@ -27,12 +27,12 @@ public class User implements UserDetails {
 
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank
     @Size(max = 100)
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Email
@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
     @NotBlank
     @Size(max = 20)
-    @Column(nullable = false, unique = true)
+    @Column(name = "student_id", nullable = false, unique = true)
     private String studentId;
 
     @NotBlank
@@ -64,7 +64,7 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Boolean enabled = true;
 
-    @Column(nullable = false)
+    @Column(name = "email_verified", nullable = false)
     private Boolean emailVerified = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
