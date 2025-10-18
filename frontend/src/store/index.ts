@@ -1,8 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+
+const dummySlice = createSlice({
+  name: 'dummy',
+  initialState: {},
+  reducers: {},
+});
 
 export const store = configureStore({
   reducer: {
-    // Add reducers here when needed
+    dummy: dummySlice.reducer,
   },
 });
 

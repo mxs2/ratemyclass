@@ -15,14 +15,14 @@ const LoginPage: React.FC = () => {
   const [error, setError] = React.useState<string | null>(null);
 
   // Get return URL from query params
-  const returnUrl = searchParams.get('returnUrl') || '/dashboard';
+  const returnUrl = searchParams.get('returnUrl') || '/home';
 
   const handleSubmit = async (values: { email: string; password: string; remember?: boolean }) => {
     try {
       setLoading(true);
       setError(null);
       await login(values);
-      
+
       // Navigate to return URL or dashboard
       navigate(returnUrl);
     } catch (err: any) {
@@ -51,10 +51,10 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       minHeight: '80vh',
       padding: '20px'
     }}>
@@ -82,9 +82,9 @@ const LoginPage: React.FC = () => {
               <Text>Test the app with demo credentials:</Text>
               <Text strong>Email: demo@university.edu</Text>
               <Text strong>Password: Demo123!</Text>
-              <Button 
-                size="small" 
-                type="link" 
+              <Button
+                size="small"
+                type="link"
                 onClick={fillDemoCredentials}
                 style={{ padding: 0 }}
               >
@@ -112,8 +112,8 @@ const LoginPage: React.FC = () => {
               { type: 'email', message: 'Please enter a valid email!' }
             ]}
           >
-            <Input 
-              prefix={<UserOutlined />} 
+            <Input
+              prefix={<UserOutlined />}
               placeholder="your.email@university.edu"
               size="large"
             />
@@ -124,8 +124,8 @@ const LoginPage: React.FC = () => {
             label="Password"
             rules={[{ required: true, message: 'Please enter your password!' }]}
           >
-            <Input.Password 
-              prefix={<LockOutlined />} 
+            <Input.Password
+              prefix={<LockOutlined />}
               placeholder="Password"
               size="large"
             />
@@ -136,9 +136,9 @@ const LoginPage: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               size="large"
               loading={loading}
               block
