@@ -30,9 +30,10 @@ const App: React.FC = () => {
       {/* Public routes without layout */}
       <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" />} />
       <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/dashboard" />} />
-      
+
       {/* Routes with layout */}
-      <Route path="/" element={
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/home" element={
         <AppLayout>
           <HomePage />
         </AppLayout>
@@ -69,7 +70,7 @@ const App: React.FC = () => {
           <SearchResultsPage />
         </AppLayout>
       } />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };

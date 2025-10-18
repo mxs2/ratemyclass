@@ -16,7 +16,7 @@ const mainMenuItems: MenuProps['items'] = [
   {
     key: '/',
     icon: <HomeOutlined />,
-    label: <Link to="/">Home</Link>,
+    label: <Link to="/home">Home</Link>,
   },
   {
     key: '/professors',
@@ -77,8 +77,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             mode="horizontal"
             selectedKeys={[location.pathname]}
             items={mainMenuItems}
-            style={{ 
-              flex: 1, 
+            style={{
+              flex: 1,
               marginLeft: 48,
               border: 'none',
               background: 'transparent'
@@ -92,7 +92,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                   Dashboard
                 </Button>
                 <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-                  <Avatar 
+                  <Avatar
                     style={{ backgroundColor: '#1890ff', cursor: 'pointer' }}
                     icon={<UserOutlined />}
                   >
