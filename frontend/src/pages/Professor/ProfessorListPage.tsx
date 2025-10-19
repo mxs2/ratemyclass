@@ -14,14 +14,12 @@ import {
   Pagination,
   Row,
   Col,
-  Divider,
   Button
 } from 'antd';
 import {
   UserOutlined,
   SearchOutlined,
   BookOutlined,
-  StarOutlined,
   FilterOutlined
 } from '@ant-design/icons';
 import { professorApi } from '../../services/api/professorApi';
@@ -177,7 +175,7 @@ const ProfessorListPage: React.FC = () => {
                 size="large"
               />
             </Col>
-            
+
             <Col xs={12} sm={8} md={4} lg={3}>
               <Select
                 placeholder="Min Rating"
@@ -211,8 +209,8 @@ const ProfessorListPage: React.FC = () => {
             </Col>
 
             <Col xs={24} sm={8} md={4} lg={2}>
-              <Button 
-                icon={<FilterOutlined />} 
+              <Button
+                icon={<FilterOutlined />}
                 onClick={clearFilters}
                 size="large"
                 style={{ width: '100%' }}
@@ -297,7 +295,7 @@ const ProfessorListPage: React.FC = () => {
                       description={
                         <Space direction="vertical" style={{ width: '100%' }}>
                           <Text type="secondary">{professor.departmentName}</Text>
-                          
+
                           {/* Rating */}
                           <div>
                             {getRatingDisplay(professor)}
@@ -318,10 +316,10 @@ const ProfessorListPage: React.FC = () => {
                   </Card>
                 </List.Item>
               )}
-              locale={{ 
-                emptyText: searchQuery || Object.keys(filters).length > 0 
-                  ? 'No professors found matching your criteria' 
-                  : 'No professors available' 
+              locale={{
+                emptyText: searchQuery || Object.keys(filters).length > 0
+                  ? 'No professors found matching your criteria'
+                  : 'No professors available'
               }}
             />
 
