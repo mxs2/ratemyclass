@@ -19,9 +19,9 @@ public class AvaliacaoCoordenadorController {
     private AvaliacaoCoordenadorService service;
 
     @PostMapping
-    public ResponseEntity<AvaliacaoCoordenador> criarAvaliacao(@RequestBody AvaliacaoCoordenadorRequestDTO request) {
-        AvaliacaoCoordenador avaliacao = service.criarAvaliacao(request);
+    public ResponseEntity<String> criarAvaliacao(@RequestBody AvaliacaoCoordenadorRequestDTO request) {
+        service.criarAvaliacao(request);
 
-        return ResponseEntity.ok(avaliacao);
+        return ResponseEntity.ok("Avaliação para coordenador cadastrada com sucesso!");
     }
 }
