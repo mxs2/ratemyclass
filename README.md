@@ -261,8 +261,8 @@ Once the backend is running, access the interactive API documentation:
 - `POST /api/v1/auth/register` - User registration
 - `POST /api/v1/auth/logout` - User logout
 
-#### Professors
-- `GET /api/v1/professors` - List professors
+#### Professores
+- `GET /api/professors` - List professors
 - `GET /api/v1/professors/{id}` - Get professor details
 - `GET /api/v1/professors/{id}/ratings` - Get professor ratings
 
@@ -271,11 +271,20 @@ Once the backend is running, access the interactive API documentation:
 - `GET /api/v1/courses/{id}` - Get course details
 - `GET /api/v1/courses/{id}/ratings` - Get course ratings
 
+
+#### Disciplinas (A FAZER)
+- `GET /disciplinas` - Lista disciplinas
+
+#### Professores (A FAZER)
+- `GET /professores` - Lista professores
+
+#### Coordenadores (A FAZER)
+- `GET /coordenadores` - Lista coordenadores
+
 #### Ratings
-- `POST /api/v1/ratings` - Submit rating
-- `GET /api/v1/ratings` - List ratings with filters
-- `PUT /api/v1/ratings/{id}` - Update rating
-- `DELETE /api/v1/ratings/{id}` - Delete rating
+- `POST /avaliacoes/professor` - Avaliação Professor
+- `POST /avaliacoes/coordenador` - Avaliação Coordenador
+- `POST /avaliacoes/disciplina` - Avaliação Disciplina
 
 ## 🤝 Contributing
 
@@ -389,5 +398,17 @@ If you encounter any issues or have questions:
 4. Contact the development team
 
 ---
+
+## Tables
+
+**Registro de avaliações:**
+- avaliacao_coordenador
+- avaliacao_professor
+- avaliacao_disciplina
+
+**Listagem dos Professores, Coordenadores e Disciplinas**
+- coordenadores
+- professores
+- disciplinas
 
 ⭐ **Star this repository if you find it helpful!**

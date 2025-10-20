@@ -20,8 +20,8 @@ public class AvaliacaoDisciplinaController {
     private AvaliacaoDisciplinaService service;
 
     @PostMapping
-    public ResponseEntity<AvaliacaoDisciplina> criarAvaliacao( @RequestBody AvaliacaoDisciplinaRequestDTO request ) {
-        AvaliacaoDisciplina novaAvaliacao = service.criarAvaliacao(request);
-        return ResponseEntity.ok(novaAvaliacao);
+    public ResponseEntity<String> criarAvaliacao( @RequestBody AvaliacaoDisciplinaRequestDTO request ) {
+        service.criarAvaliacao(request);
+        return ResponseEntity.ok("Avaliação para disciplina cadastrada com sucesso!");
     };
 }

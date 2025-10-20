@@ -15,8 +15,8 @@ public class AvaliacaoProfessorController {
     private AvaliacaoProfessorService service;
 
     @PostMapping
-    public ResponseEntity<AvaliacaoProfessor> criarAvaliacao(@RequestBody AvaliacaoProfessorRequestDTO request) {
-        AvaliacaoProfessor novaAvaliacao = service.criarAvaliacao(request);
-        return ResponseEntity.ok(novaAvaliacao);
+    public ResponseEntity<String> criarAvaliacao(@RequestBody AvaliacaoProfessorRequestDTO request) {
+        service.criarAvaliacao(request);
+        return ResponseEntity.ok("Avaliação para professor cadastrada com sucesso!");
     }
 }
