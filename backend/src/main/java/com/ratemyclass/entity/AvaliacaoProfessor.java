@@ -35,7 +35,7 @@ public class AvaliacaoProfessor {
     private String visibilidade;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private boolean active = true;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

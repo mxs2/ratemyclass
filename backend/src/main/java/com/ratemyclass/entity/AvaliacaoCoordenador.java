@@ -2,7 +2,6 @@ package com.ratemyclass.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 
 @Data
@@ -36,7 +35,7 @@ public class AvaliacaoCoordenador {
     private String visibilidade;
 
     @Column(nullable = false)
-    private Boolean active = true;
+    private boolean active = true;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
