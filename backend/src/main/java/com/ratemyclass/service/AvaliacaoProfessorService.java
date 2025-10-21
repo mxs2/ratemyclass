@@ -9,15 +9,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AvaliacaoProfessorService {
 
-    @Autowired // injeção de dependencias, sem precisa usar o new para instaciar uma classe
+    @Autowired
     private AvaliacaoProfessorRepository repository;
 
-    public void criarAvaliacao(AvaliacaoProfessorRequestDTO request) {
+    public List<AvaliacaoProfessor> listarAvaliacoes() {
+        return repository.findByActiveTrue();
+    }
 
+    public void criarAvaliacao(AvaliacaoProfessorRequestDTO request) {
         validarCamposObrigatorios(request);
 
         AvaliacaoProfessor avaliacao = new AvaliacaoProfessor();
@@ -28,7 +32,25 @@ public class AvaliacaoProfessorService {
         avaliacao.setOrganizacao(request.getOrganizacao());
         avaliacao.setComentario(request.getComentario());
         avaliacao.setVisibilidade(request.getVisibilidade());
+        avaliacao.setActive(true);
 
+        repository.save(avaliacao);
+    }
+
+    public void deletarAvaliacao(Long id) {
+        Optional<AvaliacaoProfessor> avaliacaoOptional = repository.findById(id);
+
+        if (avaliacaoOptional.isEmpty()) {
+            throw new AvaliacaoInvalidaException("Avaliação de professor não encontrada para o ID: " + id);
+        }
+
+        AvaliacaoProfessor avaliacao = avaliacaoOptional.get();
+
+        if (!avaliacao.isActive()) {
+            throw new AvaliacaoInvalidaException("A avaliação já foi desativada anteriormente.");
+        }
+
+        avaliacao.setActive(false);
         repository.save(avaliacao);
     }
 
