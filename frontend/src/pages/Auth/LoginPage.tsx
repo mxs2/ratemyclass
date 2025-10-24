@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
   const [error, setError] = React.useState<string | null>(null);
 
   // Get return URL from query params
-  const returnUrl = searchParams.get('returnUrl') || '/home';
+  const returnUrl = searchParams.get('returnUrl') || '/dashboard';
 
   const handleSubmit = async (values: { email: string; password: string; remember?: boolean }) => {
     try {

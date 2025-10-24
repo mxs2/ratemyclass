@@ -18,6 +18,13 @@ interface Evaluation {
     createdAt: string;
 }
 
+const coordenadores = [
+    { id: 1, nome: 'Maria Eduarda Santos' },
+    { id: 2, nome: 'Carlos Henrique Silva' },
+    { id: 3, nome: 'Fernanda Lima' },
+    { id: 4, nome: 'Rafael Costa' },
+];
+
 const CoordenadorEvaluationsPage: React.FC = () => {
     const [items, setItems] = useState<Evaluation[]>([]);
     const [loading, setLoading] = useState(true);
@@ -62,6 +69,9 @@ const CoordenadorEvaluationsPage: React.FC = () => {
             ? new Date(item.createdAt).toLocaleString('pt-BR')
             : '';
 
+        const coordenador = coordenadores.find((p) => p.id === item.coordenadorId);
+        const nomeCoordenador = coordenador ? coordenador.nome : 'Professor desconhecido';
+
         return (
             <List.Item
                 actions={[
@@ -101,7 +111,7 @@ const CoordenadorEvaluationsPage: React.FC = () => {
                     }
                     title={
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <Text strong style={{ marginRight: 8 }}>{`Avaliação (#${item.id})`}</Text>
+                            <Text strong style={{ marginRight: 8 }}>{`Avaliação - ${nomeCoordenador}`}</Text>
                             <Text type="secondary">
                                 {item.visibilidade === 'publica' ? 'Pública' : item.visibilidade}
                             </Text>
@@ -110,7 +120,7 @@ const CoordenadorEvaluationsPage: React.FC = () => {
                     description={
                         <div>
                             <div style={{ color: '#444', marginBottom: 6 }}>{item.comentario}</div>
-                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center', fontWeight: 650 }}>
                                 <Text type="secondary">Transparência: {item.transparencia}</Text>
                                 <Text type="secondary">Interação com aluno: {item.interacaoAluno}</Text>
                                 <Text type="secondary">Suporte: {item.suporte}</Text>

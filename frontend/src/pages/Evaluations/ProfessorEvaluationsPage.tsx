@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined, CalendarOutlined } from '@ant-design/icons';
+import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography, Rate } from 'antd';
+import { DeleteOutlined, EditOutlined, CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { avaliacaoApi } from '../../services/api/avaliacaoApi';
 
 const { Title, Text } = Typography;
@@ -17,6 +17,13 @@ interface Evaluation {
     active: boolean;
     createdAt: string;
 }
+
+const professores = [
+    { id: 1, nome: 'João Victor Tinoco de Souza' },
+    { id: 2, nome: 'Eduardo Nascimento de Arruda' },
+    { id: 3, nome: 'José Maurício da Silva Junior' },
+    { id: 4, nome: 'Maurício da Motta Braga' },
+];
 
 const ProfessorEvaluationsPage: React.FC = () => {
     const [items, setItems] = useState<Evaluation[]>([]);
@@ -55,8 +62,13 @@ const ProfessorEvaluationsPage: React.FC = () => {
     };
 
     const renderItem = (item: Evaluation) => {
-        const avg = Math.round((item.didatica + item.qualidadeAula + item.flexibilidade + item.organizacao) / 4);
+        const avg = Math.round(
+            (item.didatica + item.qualidadeAula + item.flexibilidade + item.organizacao) / 4
+        );
         const created = item.createdAt ? new Date(item.createdAt).toLocaleString('pt-BR') : '';
+
+        const professor = professores.find((p) => p.id === item.professorId);
+        const nomeProfessor = professor ? professor.nome : 'Professor desconhecido';
 
         return (
             <List.Item
@@ -85,10 +97,23 @@ const ProfessorEvaluationsPage: React.FC = () => {
                 ]}
             >
                 <List.Item.Meta
-                    avatar={<Avatar style={{ background: '#1890ff' }}>{avg}</Avatar>}
+                    avatar={
+                        // <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        //     <Rate disabled allowHalf value={avg / 2} style={{ color: '#1890ff' }} />
+                        // </div>
+
+                        <Avatar
+                            style={{
+                                background: '#faad14',
+                            }}
+                            icon={<UserOutlined />}
+                        >
+                            {avg}
+                        </Avatar>
+                    }
                     title={
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <Text strong style={{ marginRight: 8 }}>{`Avaliação (#${item.id})`}</Text>
+                            <Text strong>{`Avaliação - ${nomeProfessor}`}</Text>
                             <Text type="secondary">
                                 {item.visibilidade === 'publica' ? 'Pública' : item.visibilidade}
                             </Text>
@@ -97,7 +122,7 @@ const ProfessorEvaluationsPage: React.FC = () => {
                     description={
                         <div>
                             <div style={{ color: '#444', marginBottom: 6 }}>{item.comentario}</div>
-                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center', fontWeight: 650 }}>
                                 <Text type="secondary">Didática: {item.didatica}</Text>
                                 <Text type="secondary">Qualidade: {item.qualidadeAula}</Text>
                                 <Text type="secondary">Flexibilidade: {item.flexibilidade}</Text>
@@ -115,8 +140,7 @@ const ProfessorEvaluationsPage: React.FC = () => {
 
     return (
         <div>
-            <Title level={4}> Minhas Avaliações - Professor </Title>
-
+            <Title level={4}>Minhas Avaliações - Professor</Title>
             <Card style={{ marginTop: 8 }}>
                 {loading ? (
                     <div style={{ textAlign: 'center', padding: 40 }}>

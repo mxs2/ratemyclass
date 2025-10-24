@@ -23,7 +23,7 @@ const AvaliacaoProfessorPage: React.FC = () => {
       await avaliacaoApi.cadastrarAvaliacao(values);
       message.success('Avaliação cadastrada com sucesso!');
       form.resetFields();
-      navigate('/professors');
+      navigate('/dashboard');
     } catch (error) {
       message.error('Erro ao cadastrar avaliação');
     } finally {

@@ -33,7 +33,7 @@ const AvaliacaoCoordenadorPage: React.FC = () => {
       await avaliacaoApiCoordenador.cadastrarAvaliacao(payload);
       message.success('Avaliação de coordenador cadastrada com sucesso!');
       form.resetFields();
-      navigate('/coordenadores');
+      navigate('/dashboard');
     } catch (error) {
       message.error('Erro ao cadastrar avaliação');
     } finally {

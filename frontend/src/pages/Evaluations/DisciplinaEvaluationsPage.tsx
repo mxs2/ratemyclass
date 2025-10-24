@@ -18,6 +18,14 @@ interface Evaluation {
     createdAt: string;
 }
 
+const disciplinas = [
+    { id: 1, nome: 'Programação Orientada a Objeto' },
+    { id: 2, nome: 'Algoritmos e Estrutura de Dados' },
+    { id: 3, nome: 'Infraestrutura de Software' },
+    { id: 4, nome: 'Estatística e Probabilidade' },
+    { id: 5, nome: 'Infra de Comunicação' },
+];
+
 const DisciplinaEvaluationsPage: React.FC = () => {
     const [items, setItems] = useState<Evaluation[]>([]);
     const [loading, setLoading] = useState(true);
@@ -62,6 +70,9 @@ const DisciplinaEvaluationsPage: React.FC = () => {
             ? new Date(item.createdAt).toLocaleString('pt-BR')
             : '';
 
+        const disciplina = disciplinas.find((p) => p.id === item.disciplinaId);
+        const nomeDisciplina = disciplina ? disciplina.nome : 'Professor desconhecido';
+
         return (
             <List.Item
                 actions={[
@@ -101,7 +112,7 @@ const DisciplinaEvaluationsPage: React.FC = () => {
                     }
                     title={
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <Text strong style={{ marginRight: 8 }}>{`Avaliação (#${item.id})`}</Text>
+                            <Text strong style={{ marginRight: 8 }}>{`Avaliação - ${nomeDisciplina}`}</Text>
                             <Text type="secondary">
                                 {item.visibilidade === 'publica' ? 'Pública' : item.visibilidade}
                             </Text>
@@ -110,7 +121,7 @@ const DisciplinaEvaluationsPage: React.FC = () => {
                     description={
                         <div>
                             <div style={{ color: '#444', marginBottom: 6 }}>{item.comentario}</div>
-                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: 16, color: '#888', alignItems: 'center', fontWeight: 650 }}>
                                 <Text type="secondary">Dificuldade: {item.dificuldade}</Text>
                                 <Text type="secondary">Metodologia: {item.metodologia}</Text>
                                 <Text type="secondary">Conteúdos: {item.conteudos}</Text>

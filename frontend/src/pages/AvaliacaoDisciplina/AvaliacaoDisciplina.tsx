@@ -33,7 +33,7 @@ const AvaliacaoDisciplinaPage: React.FC = () => {
       await avaliacaoApiDisciplina.cadastrarAvaliacao(payload);
       message.success('Avaliação de disciplina cadastrada com sucesso!');
       form.resetFields();
-      navigate('/disciplinas');
+      navigate('/dashboard');
     } catch (error) {
       message.error('Erro ao cadastrar avaliação');
     } finally {
