@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography, Rate } from 'antd';
+import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography } from 'antd';
 import { DeleteOutlined, EditOutlined, CalendarOutlined, UserOutlined } from '@ant-design/icons';
 import { avaliacaoApi } from '../../services/api/avaliacaoApi';
 
