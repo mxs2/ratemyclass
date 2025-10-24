@@ -1,5 +1,5 @@
 import { Layout, Menu, Avatar, Dropdown, Button, Space } from 'antd';
-import { UserOutlined, LogoutOutlined, HomeOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, HomeOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import type { MenuProps } from 'antd';
@@ -22,12 +22,7 @@ const mainMenuItems: MenuProps['items'] = [
   //   key: '/professors',
   //   icon: <UserOutlined />,
   //   label: <Link to="/professors">Professors</Link>,
-  // },
-  // {
-  //   key: '/courses',
-  //   icon: <BookOutlined />,
-  //   label: <Link to="/courses">Courses</Link>,
-  // },
+  // }
 ];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
