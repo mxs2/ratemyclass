@@ -1,5 +1,5 @@
 import { Layout, Menu, Avatar, Dropdown, Button, Space } from 'antd';
-import { UserOutlined, LogoutOutlined, HomeOutlined, SearchOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, HomeOutlined, BookOutlined } from '@ant-design/icons';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import type { MenuProps } from 'antd';
@@ -16,23 +16,18 @@ const mainMenuItems: MenuProps['items'] = [
   {
     key: '/',
     icon: <HomeOutlined />,
-    label: <Link to="/home">Home</Link>,
+    label: <Link to="/dashboard">Dashboard</Link>,
   },
-  {
-    key: '/professors',
-    icon: <UserOutlined />,
-    label: <Link to="/professors">Professors</Link>,
-  },
-  {
-    key: '/courses',
-    icon: <BookOutlined />,
-    label: <Link to="/courses">Courses</Link>,
-  },
-  {
-    key: '/search',
-    icon: <SearchOutlined />,
-    label: <Link to="/search">Search</Link>,
-  },
+  // {
+  //   key: '/professors',
+  //   icon: <UserOutlined />,
+  //   label: <Link to="/professors">Professors</Link>,
+  // },
+  // {
+  //   key: '/courses',
+  //   icon: <BookOutlined />,
+  //   label: <Link to="/courses">Courses</Link>,
+  // },
 ];
 
 const AppLayout = ({ children }: AppLayoutProps) => {
@@ -88,9 +83,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           <div>
             {isAuthenticated ? (
               <Space>
-                <Button type="primary" onClick={() => navigate('/dashboard')}>
+                {/* <Button type="primary" onClick={() => navigate('/dashboard')}>
                   Dashboard
-                </Button>
+                </Button> */}
                 <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
                   <Avatar
                     style={{ backgroundColor: '#1890ff', cursor: 'pointer' }}

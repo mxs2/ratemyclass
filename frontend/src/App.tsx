@@ -9,10 +9,16 @@ import ProfessorListPage from './pages/Professor/ProfessorListPage';
 import ProfessorProfilePage from './pages/Professor/ProfessorProfilePage';
 import CourseListPage from './pages/Course/CourseListPage';
 import CourseProfilePage from './pages/Course/CourseProfilePage';
-import SearchResultsPage from './pages/Search/SearchResultsPage';
 import DashboardPage from './pages/Dashboard/DashboardPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
+import AvaliacaoProfessorPage from './pages/AvaliacaoProfessor/AvaliacaoProfessor';
+import AvaliacaoDisciplinaPage from './pages/AvaliacaoDisciplina/AvaliacaoDisciplina';
+import AvaliacaoCoordenadorPage from './pages/AvaliacaoCoordenador/AvaliacaoCoordenador';
+import ProfessorEvaluationsPage from './pages/Evaluations/ProfessorEvaluationsPage';
+import DisciplinaEvaluationsPage from './pages/Evaluations/DisciplinaEvaluationsPage';
+import CoordenadorEvaluationsPage from './pages/Evaluations/CoordenadorEvaluationsPage';
+
 
 const App: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -65,9 +71,50 @@ const App: React.FC = () => {
           <CourseProfilePage />
         </AppLayout>
       } />
-      <Route path="/search" element={
+      <Route path="/avaliar-professor" element={
         <AppLayout>
-          <SearchResultsPage />
+          <ProtectedRoute>
+            <AvaliacaoProfessorPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/avaliar-disciplina" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <AvaliacaoDisciplinaPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/avaliar-coordenador" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <AvaliacaoCoordenadorPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+      <Route path="/minhas-avaliacoes/professor" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <ProfessorEvaluationsPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/minhas-avaliacoes/disciplina" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <DisciplinaEvaluationsPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/minhas-avaliacoes/coordenador" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <CoordenadorEvaluationsPage />
+          </ProtectedRoute>
         </AppLayout>
       } />
       <Route path="*" element={<Navigate to="/login" replace />} />
