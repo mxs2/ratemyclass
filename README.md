@@ -6,16 +6,35 @@ A modern web application for students to rate and review professors and courses 
 ![Coverage](https://codecov.io/gh/mxs2/ratemyclass/branch/main/graph/badge.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
+
+## 👥 Team
+
+- **Alessandra Barbosa de Santana**
+- **Maria Gabriela Damásio Bezerra**
+- **Mateus Xavier**
+- **Raphael Rennan Soares de Miranda**
+- **Rayane Cavalcanti da Silva**
+- **Samuel Silva Araújo de Brito**
+
+## 🔗 Links
+
+- [Trello Board](https://trello.com/invite/b/68bc9a1653c4b185e984020e/ATTI63ea9e3314d386b2e6071f44e4dd5b1e73956C78/transparecesar) - Project management and user stories
+- [Figma Design](https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=13-12205&p=f&t=HfrxX5qF0bMNlxau-0) - UI/UX prototypes
+- [YouTube](https://youtu.be/bTy5LQIfXJw?si=_qeF84S4VDrcQJFO) - Project presentation (Entrega 1)
+- [YouTube](https://youtu.be/IOHdonVIenQ) - Project presentation (Entrega 2)
+- [YouTube](https://youtu.be/_Jk1oFpy5wU) -  Screencast HUs (Entrega 3) 
+- [YouTube](https://youtu.be/mW9EzpxDMXs) - Screencast Teste (Entrega 3)
+
 ## 🌟 Features
 
-- **Professor & Course Reviews**: Comprehensive rating system with multiple criteria
-- **Advanced Search**: Find professors and courses with powerful filtering options
-- **Analytics Dashboard**: Visual insights and statistics for ratings and trends
-- **User Authentication**: Secure login with university email verification
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Real-time Updates**: Live notifications and updates for new reviews
-- **Anonymous Reviews**: Option to submit anonymous feedback
-- **Department Organization**: Browse content by academic departments
+- **HU-001** https://trello.com/c/zAmOcMLL
+- **HU-002** https://trello.com/c/uX0xmtO0
+- **HU-003** https://trello.com/c/5rhhCx63
+- **HU-004** https://trello.com/c/XscGvAYQ
+- **HU-005** https://trello.com/c/ZSDhwQWt
+- **HU-006** https://trello.com/c/dBQdX0CE
+- **HU-007** https://trello.com/c/eG63XmgC
+-  **HU-008** https://trello.com/c/ALVgJ878
 
 ## 🛠️ Technology Stack
 
@@ -187,67 +206,6 @@ VITE_API_BASE_URL=http://localhost:8080/api
 VITE_APP_NAME=RateMyClass
 ```
 
-## 🧪 Testing
-
-### Backend Tests
-```bash
-cd backend
-./mvnw test                    # Run all tests
-./mvnw test -Dtest=ClassName   # Run specific test
-./mvnw jacoco:report          # Generate coverage report
-```
-
-### Frontend Tests
-```bash
-cd frontend
-npm test                      # Run tests in watch mode
-npm run test:coverage        # Run tests with coverage
-npm run test:ui              # Run tests with UI
-```
-
-## 📦 Building for Production
-
-### Manual Build
-```bash
-# Backend
-cd backend
-./mvnw clean package
-
-# Frontend
-cd frontend
-npm run build
-```
-
-### Docker Build
-```bash
-# Build all services
-docker-compose build
-
-# Build specific service
-docker-compose build backend
-docker-compose build frontend
-```
-
-## 🚀 Deployment
-
-### Using Docker Compose
-```bash
-# Production deployment
-docker-compose -f docker-compose.yml up -d
-
-# Check logs
-docker-compose logs -f
-```
-
-### Environment-specific Deployments
-```bash
-# Development
-docker-compose -f docker-compose.dev.yml up -d
-
-# Staging
-docker-compose -f docker-compose.staging.yml up -d
-```
-
 ## 📊 API Documentation
 
 Once the backend is running, access the interactive API documentation:
@@ -261,83 +219,19 @@ Once the backend is running, access the interactive API documentation:
 - `POST /api/v1/auth/register` - User registration
 - `POST /api/v1/auth/logout` - User logout
 
-#### Professores
-- `GET /api/professors` - List professors
-- `GET /api/v1/professors/{id}` - Get professor details
-- `GET /api/v1/professors/{id}/ratings` - Get professor ratings
-
-#### Courses
-- `GET /api/v1/courses` - List courses
-- `GET /api/v1/courses/{id}` - Get course details
-- `GET /api/v1/courses/{id}/ratings` - Get course ratings
-
-
-#### Disciplinas (A FAZER)
+#### Disciplinas
 - `GET /disciplinas` - Lista disciplinas
 
-#### Professores (A FAZER)
+#### Professores
 - `GET /professores` - Lista professores
 
-#### Coordenadores (A FAZER)
+#### Coordenadores
 - `GET /coordenadores` - Lista coordenadores
 
-#### Ratings
+#### Avaliações
 - `POST /avaliacoes/professor` - Avaliação Professor
 - `POST /avaliacoes/coordenador` - Avaliação Coordenador
 - `POST /avaliacoes/disciplina` - Avaliação Disciplina
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
-
-### Development Guidelines
-- Follow the existing code style and conventions
-- Write tests for new features
-- Update documentation as needed
-- Ensure all CI checks pass
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Database Connection Issues**
-```bash
-# Check if PostgreSQL is running
-pg_isready -U postgres
-
-# Reset database
-docker-compose down -v
-docker-compose up database -d
-```
-
-**Frontend Build Issues**
-```bash
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
-**Backend Build Issues**
-```bash
-# Clean and rebuild
-./mvnw clean compile
-./mvnw dependency:resolve
-```
 
 ### Logs and Debugging
 
@@ -371,31 +265,6 @@ curl http://localhost:8080/api/actuator/health
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Team
-
-- **Alessandra Barbosa de Santana**
-- **Maria Gabriela Damásio Bezerra**
-- **Mateus Xavier**
-- **Raphael Rennan Soares de Miranda**
-- **Rayane Cavalcanti da Silva**
-- **Samuel Silva Araújo de Brito**
-
-## 🔗 Links
-
-- [Trello Board](https://trello.com/invite/b/68bc9a1653c4b185e984020e/ATTI63ea9e3314d386b2e6071f44e4dd5b1e73956C78/transparecesar) - Project management and user stories
-- [Figma Design](https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=13-12205&p=f&t=HfrxX5qF0bMNlxau-0) - UI/UX prototypes
-- [YouTube](https://youtu.be/bTy5LQIfXJw?si=_qeF84S4VDrcQJFO) - Project presentation (Entrega 1)
-- [YouTube](https://youtu.be/IOHdonVIenQ) - Project presentation (Entrega 2)
-
-## 🆘 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [troubleshooting section](#-troubleshooting)
-2. Search existing [issues](https://github.com/mxs2/ratemyclass/issues)
-3. Create a new issue with detailed information
-4. Contact the development team
 
 ---
 
