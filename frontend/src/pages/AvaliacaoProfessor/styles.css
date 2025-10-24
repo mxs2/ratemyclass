@@ -1,0 +1,29 @@
+.avaliacao-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.avaliacao-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ant-input-number {
+  width: 100%;
+}
+
+.ant-radio-group {
+  width: 100%;
+  display: flex;
+  gap: 24px;
+}
+
+.ant-card-head-title {
+  font-size: 20px;
+  font-weight: 500;
+}
