@@ -16,6 +16,9 @@ A modern web application for students to rate and review professors and courses 
 - **Rayane Cavalcanti da Silva**
 - **Samuel Silva Araújo de Brito**
 
+## Bug tracker
+[Bug tracker (closed issues)](https://github.com/mxs2/ratemyclass/issues?q=is%3Aissue%20state%3Aclosed)
+
 ## Links
 
 - [Trello Board](https://trello.com/invite/b/68bc9a1653c4b185e984020e/ATTI63ea9e3314d386b2e6071f44e4dd5b1e73956C78/transparecesar) - Project management and user stories
