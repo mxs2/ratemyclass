@@ -1,4 +1,4 @@
-# RateMyClass 📚
+# RateMyClass
 
 A modern web application for students to rate and review professors and courses at their university, built with Spring Boot and React.
 
@@ -7,7 +7,7 @@ A modern web application for students to rate and review professors and courses 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 
-## 👥 Team
+## Team
 
 - **Alessandra Barbosa de Santana**
 - **Maria Gabriela Damásio Bezerra**
@@ -16,7 +16,7 @@ A modern web application for students to rate and review professors and courses 
 - **Rayane Cavalcanti da Silva**
 - **Samuel Silva Araújo de Brito**
 
-## 🔗 Links
+## Links
 
 - [Trello Board](https://trello.com/invite/b/68bc9a1653c4b185e984020e/ATTI63ea9e3314d386b2e6071f44e4dd5b1e73956C78/transparecesar) - Project management and user stories
 - [Figma Design](https://www.figma.com/design/wNy2xI3GMrjVXo8YCp9tdT/Projeto-POO?node-id=13-12205&p=f&t=HfrxX5qF0bMNlxau-0) - UI/UX prototypes
@@ -25,7 +25,7 @@ A modern web application for students to rate and review professors and courses 
 - [YouTube](https://youtu.be/_Jk1oFpy5wU) -  Screencast HUs (Entrega 3) 
 - [YouTube](https://youtu.be/mW9EzpxDMXs) - Screencast Teste (Entrega 3)
 
-## 🌟 Features
+## Features
 
 - **HU-001** https://trello.com/c/zAmOcMLL
 - **HU-002** https://trello.com/c/uX0xmtO0
@@ -36,7 +36,7 @@ A modern web application for students to rate and review professors and courses 
 - **HU-007** https://trello.com/c/eG63XmgC
 -  **HU-008** https://trello.com/c/ALVgJ878
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Backend
 - **Java 21** - Latest LTS version with modern language features
@@ -55,7 +55,7 @@ A modern web application for students to rate and review professors and courses 
 - **Vite** - Fast build tool and development server
 - **Recharts** - Responsive charts and data visualization
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Using the Startup Scripts (Recommended)
 
@@ -137,7 +137,7 @@ See `scripts/SCRIPTS_README.md` for detailed information.
    - Backend API: http://localhost:8080
    - Database: localhost:5432
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ratemyclass/
@@ -180,7 +180,7 @@ ratemyclass/
 └── README.md               # Project documentation
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Backend Configuration
 
@@ -206,7 +206,7 @@ VITE_API_BASE_URL=http://localhost:8080/api
 VITE_APP_NAME=RateMyClass
 ```
 
-## 📊 API Documentation
+## API Documentation
 
 Once the backend is running, access the interactive API documentation:
 - **Swagger UI**: http://localhost:8080/api/swagger-ui.html
@@ -247,13 +247,13 @@ docker exec -it ratemyclass-db psql -U postgres -d ratemyclass
 curl http://localhost:8080/api/actuator/health
 ```
 
-## 📈 Monitoring and Health Checks
+## Monitoring and Health Checks
 
 - **Backend Health**: http://localhost:8080/api/actuator/health
 - **Frontend Health**: http://localhost:3000/health
 - **Database Metrics**: Available through Spring Boot Actuator
 
-## 🔒 Security
+## Security
 
 - JWT-based authentication
 - CORS protection
@@ -262,7 +262,7 @@ curl http://localhost:8080/api/actuator/health
 - Input validation and sanitization
 - Rate limiting on API endpoints
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -280,4 +280,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - professores
 - disciplinas
 
-⭐ **Star this repository if you find it helpful!**
+**Star this repository if you find it helpful!**
