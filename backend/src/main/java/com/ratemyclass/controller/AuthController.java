@@ -35,7 +35,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("Registration failed", e.getMessage()));
+                    .body(new ErrorResponse("Erro ao cadastrar", e.getMessage()));
         }
     }
     
@@ -49,7 +49,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("Authentication failed", e.getMessage()));
+                    .body(new ErrorResponse("Erro em autenticação", e.getMessage()));
         }
     }
     
@@ -66,7 +66,7 @@ public class AuthController {
             return ResponseEntity.ok(userResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse("User not found", e.getMessage()));
+                    .body(new ErrorResponse("Usuário não encontrado", e.getMessage()));
         }
     }
     

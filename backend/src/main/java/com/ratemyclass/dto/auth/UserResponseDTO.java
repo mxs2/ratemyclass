@@ -26,7 +26,7 @@ public class UserResponseDTO {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.email = user.getEmail();
+        this.email = user.getEmail().getValue();
         this.studentId = user.getStudentId();
         this.major = user.getMajor();
         this.graduationYear = user.getGraduationYear();

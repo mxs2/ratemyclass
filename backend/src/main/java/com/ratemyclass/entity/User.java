@@ -1,7 +1,9 @@
 package com.ratemyclass.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.ratemyclass.converter.EmailDeserializer;
+import com.ratemyclass.valueObject.Email;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,11 +37,13 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Email
-    @NotBlank
-    @Size(max = 150)
-    @Column(nullable = false, unique = true)
-    private String email;
+    @AttributeOverride(
+            name = "value",
+            column = @Column(name = "email", unique = true, nullable = false, length = 150)
+    )
+    @Embedded
+    @JsonDeserialize(using = EmailDeserializer.class)
+    private Email email;
 
     @NotBlank
     @Size(max = 20)
@@ -99,7 +103,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return email != null ? email.getValue() : null;
     }
 
     @Override
@@ -132,8 +136,10 @@ public class User implements UserDetails {
     public String getLastName() { return lastName; }
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Email getEmail() { return email; }
+    public void setEmail(Email email) {
+        this.email = email;
+    }
 
     public String getStudentId() { return studentId; }
     public void setStudentId(String studentId) { this.studentId = studentId; }

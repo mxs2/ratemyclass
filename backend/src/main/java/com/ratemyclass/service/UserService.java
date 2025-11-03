@@ -6,6 +6,7 @@ import com.ratemyclass.entity.User;
 import com.ratemyclass.exception.UserAlreadyExistsException;
 import com.ratemyclass.exception.UserNotFoundException;
 import com.ratemyclass.repository.UserRepository;
+import com.ratemyclass.valueObject.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,12 @@ public class UserService {
     public UserResponseDTO createUser(RegisterRequestDTO registerRequest) {
         // Validate if user already exists
         validateUserDoesNotExist(registerRequest.getEmail(), registerRequest.getStudentId());
-        
+
         // Create new user entity
         User user = new User();
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
-        user.setEmail(registerRequest.getEmail().toLowerCase());
+        user.setEmail(new Email(registerRequest.getEmail()));
         user.setStudentId(registerRequest.getStudentId());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setMajor(registerRequest.getMajor());
@@ -45,10 +46,10 @@ public class UserService {
         user.setRole(User.Role.STUDENT); // Default role
         user.setEnabled(true);
         user.setEmailVerified(false); // Will be verified later via email
-        
+
         // Save user
         User savedUser = userRepository.save(user);
-        
+
         // Return DTO
         return new UserResponseDTO(savedUser);
     }
