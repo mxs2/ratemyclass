@@ -1,5 +1,5 @@
--- Migration: V13__add_active_column_to_avaliacao_tables.sql
--- Descrição: Remoção das tabelas selecionadas (marcadas em azul no print)
+-- Migration: V13__drop_obsolete_tables.sql
+-- Descrição: Remoção das tabelas obsoletas
 
 DROP TABLE IF EXISTS course_prerequisites CASCADE;
 DROP TABLE IF EXISTS course_professors CASCADE;
