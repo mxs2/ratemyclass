@@ -74,16 +74,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
 
-                        // Public read-only endpoints for browsing
-                        .requestMatchers(HttpMethod.GET, "/api/professors/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/departments/**").permitAll()
-
                         // Admin only endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // Professor management endpoints (write operations)
-                        .requestMatchers("/api/professor/**").hasAnyRole("PROFESSOR", "ADMIN")
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated());

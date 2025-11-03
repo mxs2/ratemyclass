@@ -77,9 +77,6 @@ public class User implements UserDetails {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Rating> ratings = new ArrayList<>();
-
     public enum Role {
         STUDENT, PROFESSOR, ADMIN
     }
@@ -169,8 +166,6 @@ public class User implements UserDetails {
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    public List<Rating> getRatings() { return ratings; }
-    public void setRatings(List<Rating> ratings) { this.ratings = ratings; }
 
     public String getFullName() {
         return firstName + " " + lastName;
