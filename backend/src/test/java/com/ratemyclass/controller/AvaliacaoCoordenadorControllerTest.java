@@ -1,7 +1,9 @@
 package com.ratemyclass.controller;
 
 import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorRequestDTO;
+import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoCoordenador;
+import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.service.AvaliacaoCoordenadorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -105,5 +111,51 @@ class AvaliacaoCoordenadorControllerTest {
         mockMvc.perform(delete("/avaliacoes/coordenador/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Avaliação de coordenador removida (desativada) com sucesso!"));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma avaliação de coordenador e retornar 200 OK")
+    void deveAtualizarAvaliacaoCoordenador() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        String jsonUpdate = """
+            {
+              "transparencia": 4,
+              "interacaoAluno": 5,
+              "suporte": 4,
+              "organizacao": 5,
+              "comentario": "Atualizado com sucesso!"
+            }
+            """;
+
+        doNothing().when(service).atualizarAvaliacao(anyLong(), any(AvaliacaoCoordenadorUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/coordenador/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonUpdate))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Avaliação atualizada com sucesso!"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando atualização falhar")
+    void deveFalharAtualizacaoAvaliacao() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        String jsonUpdate = """
+            {
+              "transparencia": 4
+            }
+            """;
+
+        // Simulando exceção do service
+        doThrow(new AvaliacaoInvalidaException("Avaliação não encontrada"))
+                .when(service).atualizarAvaliacao(anyLong(), any(AvaliacaoCoordenadorUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/coordenador/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonUpdate))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Avaliação não encontrada"));
     }
 }

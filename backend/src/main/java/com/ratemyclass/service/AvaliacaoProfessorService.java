@@ -1,6 +1,7 @@
 package com.ratemyclass.service;
 
 import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorRequestDTO;
+import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoProfessor;
 import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.repository.AvaliacaoProfessorRepository;
@@ -67,6 +68,53 @@ public class AvaliacaoProfessorService {
             String mensagem = "Campos obrigatórios estão vazios ou preenchidos incorretamente: "
                     + String.join(", ", camposFaltando);
             throw new AvaliacaoInvalidaException(mensagem);
+        }
+    }
+
+    // ------------------- NOVO MÉTODO DE UPDATE -------------------
+    public void atualizarAvaliacao(Long id, AvaliacaoProfessorUpdateDTO request) {
+        Optional<AvaliacaoProfessor> avaliacaoOpt = repository.findById(id);
+
+        if (avaliacaoOpt.isEmpty() || !avaliacaoOpt.get().isActive()) {
+            throw new AvaliacaoInvalidaException("Avaliação não encontrada ou já desativada.");
+        }
+
+        validarCamposUpdate(request);
+
+        AvaliacaoProfessor avaliacao = avaliacaoOpt.get();
+
+        if (request.getDidatica() != null) {
+            avaliacao.setDidatica(request.getDidatica());
+        }
+        if (request.getQualidadeAula() != null) {
+            avaliacao.setQualidadeAula(request.getQualidadeAula());
+        }
+        if (request.getFlexibilidade() != null) {
+            avaliacao.setFlexibilidade(request.getFlexibilidade());
+        }
+        if (request.getOrganizacao() != null) {
+            avaliacao.setOrganizacao(request.getOrganizacao());
+        }
+        if (request.getComentario() != null) {
+            avaliacao.setComentario(request.getComentario());
+        }
+
+        repository.save(avaliacao);
+        System.out.println("Avaliação ID " + id + " atualizada com sucesso.");
+    }
+
+    private void validarCamposUpdate(AvaliacaoProfessorUpdateDTO request) {
+        if (request.getDidatica() != null && (request.getDidatica() < 1 || request.getDidatica() > 5)) {
+            throw new AvaliacaoInvalidaException("Nota de didática deve ser entre 1 e 5.");
+        }
+        if (request.getQualidadeAula() != null && (request.getQualidadeAula() < 1 || request.getQualidadeAula() > 5)) {
+            throw new AvaliacaoInvalidaException("Nota de qualidade da aula deve ser entre 1 e 5.");
+        }
+        if (request.getFlexibilidade() != null && (request.getFlexibilidade() < 1 || request.getFlexibilidade() > 5)) {
+            throw new AvaliacaoInvalidaException("Nota de flexibilidade deve ser entre 1 e 5.");
+        }
+        if (request.getOrganizacao() != null && (request.getOrganizacao() < 1 || request.getOrganizacao() > 5)) {
+            throw new AvaliacaoInvalidaException("Nota de organização deve ser entre 1 e 5.");
         }
     }
 }

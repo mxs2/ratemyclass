@@ -1,7 +1,9 @@
 package com.ratemyclass.controller;
 
 import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorRequestDTO;
+import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoCoordenador;
+import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.service.AvaliacaoCoordenadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +42,18 @@ public class AvaliacaoCoordenadorController {
         service.deletarAvaliacao(id);
         return ResponseEntity.ok("Avaliação de coordenador removida (desativada) com sucesso!");
     }
-}
 
+    // ------------------- NOVO MÉTODO DE UPDATE -------------------
+    @PutMapping("/{id}")
+    public ResponseEntity<String> atualizarAvaliacao(
+            @PathVariable Long id,
+            @RequestBody AvaliacaoCoordenadorUpdateDTO request
+    ) {
+        try {
+            service.atualizarAvaliacao(id, request);
+            return ResponseEntity.ok("Avaliação atualizada com sucesso!");
+        } catch (AvaliacaoInvalidaException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+}

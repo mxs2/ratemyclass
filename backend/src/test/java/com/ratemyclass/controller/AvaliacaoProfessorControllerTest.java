@@ -2,7 +2,9 @@ package com.ratemyclass.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorRequestDTO;
+import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoProfessor;
+import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.service.AvaliacaoProfessorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,8 +57,8 @@ class AvaliacaoProfessorControllerTest {
         doNothing().when(service).criarAvaliacao(any(AvaliacaoProfessorRequestDTO.class));
 
         mockMvc.perform(post("/avaliacoes/professor")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Avaliação para professor cadastrada com sucesso!"));
     }
@@ -91,5 +93,41 @@ class AvaliacaoProfessorControllerTest {
                 .andExpect(content().string("Avaliação de professor removida (desativada) com sucesso!"));
 
         verify(service, times(1)).deletarAvaliacao(1L);
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma avaliação de professor e retornar 200 OK")
+    void deveAtualizarAvaliacao() throws Exception {
+        AvaliacaoProfessorUpdateDTO updateDTO = new AvaliacaoProfessorUpdateDTO();
+        updateDTO.setDidatica(4);
+        updateDTO.setQualidadeAula(5);
+        updateDTO.setFlexibilidade(4);
+        updateDTO.setOrganizacao(5);
+        updateDTO.setComentario("Atualizado com sucesso!");
+
+        doNothing().when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoProfessorUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/professor/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Avaliação atualizada com sucesso!"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando atualização falhar")
+    void deveFalharAtualizacao() throws Exception {
+        AvaliacaoProfessorUpdateDTO updateDTO = new AvaliacaoProfessorUpdateDTO();
+        updateDTO.setDidatica(4);
+
+        // Simula exceção ao atualizar
+        doThrow(new AvaliacaoInvalidaException("Erro na atualização"))
+                .when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoProfessorUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/professor/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Erro na atualização"));
     }
 }

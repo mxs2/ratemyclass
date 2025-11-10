@@ -1,7 +1,9 @@
 package com.ratemyclass.controller;
 
 import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaRequestDTO;
+import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoDisciplina;
+import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.service.AvaliacaoDisciplinaService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -87,5 +90,51 @@ class AvaliacaoDisciplinaControllerTest {
         mockMvc.perform(delete("/avaliacoes/disciplina/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Avaliação de disciplina removida (desativada) com sucesso!"));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma avaliação de disciplina e retornar 200 OK")
+    void deveAtualizarAvaliacaoDisciplina() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        String jsonUpdate = """
+            {
+              "dificuldade": 3,
+              "metodologia": 4,
+              "conteudos": 4,
+              "aplicabilidade": 5,
+              "comentario": "Atualizado com sucesso!"
+            }
+            """;
+
+        doNothing().when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoDisciplinaUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/disciplina/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonUpdate))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Avaliação atualizada com sucesso!"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 Bad Request quando atualização falhar")
+    void deveFalharAtualizacaoAvaliacao() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        String jsonUpdate = """
+            {
+              "dificuldade": 3
+            }
+            """;
+
+        // Simula exceção lançada pelo service
+        doThrow(new AvaliacaoInvalidaException("Avaliação não encontrada ou já desativada."))
+                .when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoDisciplinaUpdateDTO.class));
+
+        mockMvc.perform(put("/avaliacoes/disciplina/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonUpdate))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Avaliação não encontrada ou já desativada."));
     }
 }
