@@ -42,10 +42,10 @@ class AvaliacaoDisciplinaControllerTest {
         String json = """
             {
               "disciplinaId": 1,
-              "dificuldade": 4,
-              "metodologia": 5,
-              "conteudos": 4,
-              "aplicabilidade": 5,
+              "dificuldade": 8,
+              "metodologia": 9,
+              "conteudos": 7,
+              "aplicabilidade": 10,
               "comentario": "Excelente disciplina!",
               "visibilidade": "PÚBLICA"
             }
@@ -67,10 +67,10 @@ class AvaliacaoDisciplinaControllerTest {
 
         AvaliacaoDisciplina avaliacao = new AvaliacaoDisciplina();
         avaliacao.setDisciplinaId(1L);
-        avaliacao.setDificuldade(4);
-        avaliacao.setMetodologia(5);
-        avaliacao.setConteudos(4);
-        avaliacao.setAplicabilidade(5);
+        avaliacao.setDificuldade(8);
+        avaliacao.setMetodologia(9);
+        avaliacao.setConteudos(7);
+        avaliacao.setAplicabilidade(10);
         avaliacao.setComentario("Boa disciplina!");
 
         when(service.listarAvaliacoes()).thenReturn(List.of(avaliacao));
@@ -99,10 +99,10 @@ class AvaliacaoDisciplinaControllerTest {
 
         String jsonUpdate = """
             {
-              "dificuldade": 3,
-              "metodologia": 4,
-              "conteudos": 4,
-              "aplicabilidade": 5,
+              "dificuldade": 6,
+              "metodologia": 8,
+              "conteudos": 7,
+              "aplicabilidade": 9,
               "comentario": "Atualizado com sucesso!"
             }
             """;
@@ -123,7 +123,7 @@ class AvaliacaoDisciplinaControllerTest {
 
         String jsonUpdate = """
             {
-              "dificuldade": 3
+              "dificuldade": 12
             }
             """;
 

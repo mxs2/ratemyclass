@@ -28,6 +28,7 @@ public class AvaliacaoCoordenadorService {
 
     public void criarAvaliacao(AvaliacaoCoordenadorRequestDTO request) {
         validarCamposObrigatorios(request);
+        validarNotas(request.getTransparencia(), request.getInteracaoAluno(), request.getSuporte(), request.getOrganizacao());
 
         AvaliacaoCoordenador avaliacao = new AvaliacaoCoordenador();
         avaliacao.setCoordenadorId(request.getCoordenadorId());
@@ -58,6 +59,17 @@ public class AvaliacaoCoordenadorService {
         }
     }
 
+    private void validarNotas(Integer transparencia, Integer interacaoAluno, Integer suporte, Integer organizacao) {
+        if (!isNotaValida(transparencia)) throw new AvaliacaoInvalidaException("Transparência deve ser entre 0 e 10.");
+        if (!isNotaValida(interacaoAluno)) throw new AvaliacaoInvalidaException("Interação com aluno deve ser entre 0 e 10.");
+        if (!isNotaValida(suporte)) throw new AvaliacaoInvalidaException("Suporte deve ser entre 0 e 10.");
+        if (!isNotaValida(organizacao)) throw new AvaliacaoInvalidaException("Organização deve ser entre 0 e 10.");
+    }
+
+    private boolean isNotaValida(Integer nota) {
+        return nota != null && nota >= 0 && nota <= 10;
+    }
+
     public void deletarAvaliacao(Long id) {
         Optional<AvaliacaoCoordenador> avaliacaoOpt = repository.findById(id);
 
@@ -75,7 +87,6 @@ public class AvaliacaoCoordenadorService {
         repository.save(avaliacao);
     }
 
-    // ------------------- NOVO MÉTODO DE UPDATE COM VALIDAÇÃO -------------------
     public void atualizarAvaliacao(Long id, AvaliacaoCoordenadorUpdateDTO request) {
         Optional<AvaliacaoCoordenador> avaliacaoOpt = repository.findById(id);
 
@@ -85,30 +96,36 @@ public class AvaliacaoCoordenadorService {
 
         AvaliacaoCoordenador avaliacao = avaliacaoOpt.get();
 
-        // Validação simples: se o valor for nulo, não atualiza; se for inválido, lança exceção
-        if (request.getTransparencia() != null && (request.getTransparencia() < 1 || request.getTransparencia() > 5)) {
-            throw new AvaliacaoInvalidaException("Transparência deve ser entre 1 e 5.");
-        }
-        if (request.getInteracaoAluno() != null && (request.getInteracaoAluno() < 1 || request.getInteracaoAluno() > 5)) {
-            throw new AvaliacaoInvalidaException("Interação com aluno deve ser entre 1 e 5.");
-        }
-        if (request.getSuporte() != null && (request.getSuporte() < 1 || request.getSuporte() > 5)) {
-            throw new AvaliacaoInvalidaException("Suporte deve ser entre 1 e 5.");
-        }
-        if (request.getOrganizacao() != null && (request.getOrganizacao() < 1 || request.getOrganizacao() > 5)) {
-            throw new AvaliacaoInvalidaException("Organização deve ser entre 1 e 5.");
+        // Validação: só atualiza se não nulo, e deve ser 0-10
+        if (request.getTransparencia() != null) {
+            if (!isNotaValida(request.getTransparencia()))
+                throw new AvaliacaoInvalidaException("Transparência deve ser entre 0 e 10.");
+            avaliacao.setTransparencia(request.getTransparencia());
         }
 
-        // Atualiza apenas os campos válidos e não nulos
-        if (request.getTransparencia() != null) avaliacao.setTransparencia(request.getTransparencia());
-        if (request.getInteracaoAluno() != null) avaliacao.setInteracaoAluno(request.getInteracaoAluno());
-        if (request.getSuporte() != null) avaliacao.setSuporte(request.getSuporte());
-        if (request.getOrganizacao() != null) avaliacao.setOrganizacao(request.getOrganizacao());
-        if (request.getComentario() != null) avaliacao.setComentario(request.getComentario());
+        if (request.getInteracaoAluno() != null) {
+            if (!isNotaValida(request.getInteracaoAluno()))
+                throw new AvaliacaoInvalidaException("Interação com aluno deve ser entre 0 e 10.");
+            avaliacao.setInteracaoAluno(request.getInteracaoAluno());
+        }
+
+        if (request.getSuporte() != null) {
+            if (!isNotaValida(request.getSuporte()))
+                throw new AvaliacaoInvalidaException("Suporte deve ser entre 0 e 10.");
+            avaliacao.setSuporte(request.getSuporte());
+        }
+
+        if (request.getOrganizacao() != null) {
+            if (!isNotaValida(request.getOrganizacao()))
+                throw new AvaliacaoInvalidaException("Organização deve ser entre 0 e 10.");
+            avaliacao.setOrganizacao(request.getOrganizacao());
+        }
+
+        if (request.getComentario() != null) {
+            avaliacao.setComentario(request.getComentario());
+        }
 
         repository.save(avaliacao);
-
-        // Log de atualização
         System.out.println("Avaliação ID " + id + " atualizada com sucesso.");
     }
 }

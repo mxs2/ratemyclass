@@ -73,17 +73,17 @@ public class AvaliacaoDisciplinaService {
     }
 
     private void validarNotas(Integer dificuldade, Integer metodologia, Integer conteudos, Integer aplicabilidade) {
-        if (dificuldade != null && (dificuldade < 1 || dificuldade > 5)) {
-            throw new AvaliacaoInvalidaException("Dificuldade deve ser entre 1 e 5.");
+        if (dificuldade != null && (dificuldade < 0 || dificuldade > 10)) {
+            throw new AvaliacaoInvalidaException("Dificuldade deve ser entre 0 e 10.");
         }
-        if (metodologia != null && (metodologia < 1 || metodologia > 5)) {
-            throw new AvaliacaoInvalidaException("Metodologia deve ser entre 1 e 5.");
+        if (metodologia != null && (metodologia < 0 || metodologia > 10)) {
+            throw new AvaliacaoInvalidaException("Metodologia deve ser entre 0 e 10.");
         }
-        if (conteudos != null && (conteudos < 1 || conteudos > 5)) {
-            throw new AvaliacaoInvalidaException("Conteúdos deve ser entre 1 e 5.");
+        if (conteudos != null && (conteudos < 0 || conteudos > 10)) {
+            throw new AvaliacaoInvalidaException("Conteúdos deve ser entre 0 e 10.");
         }
-        if (aplicabilidade != null && (aplicabilidade < 1 || aplicabilidade > 5)) {
-            throw new AvaliacaoInvalidaException("Aplicabilidade deve ser entre 1 e 5.");
+        if (aplicabilidade != null && (aplicabilidade < 0 || aplicabilidade > 10)) {
+            throw new AvaliacaoInvalidaException("Aplicabilidade deve ser entre 0 e 10.");
         }
     }
 

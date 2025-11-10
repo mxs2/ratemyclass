@@ -47,10 +47,10 @@ class AvaliacaoProfessorControllerTest {
     void deveCriarAvaliacao() throws Exception {
         AvaliacaoProfessorRequestDTO request = new AvaliacaoProfessorRequestDTO();
         request.setProfessorId(1L);
-        request.setDidatica(5);
-        request.setQualidadeAula(4);
-        request.setFlexibilidade(4);
-        request.setOrganizacao(5);
+        request.setDidatica(8);
+        request.setQualidadeAula(9);
+        request.setFlexibilidade(7);
+        request.setOrganizacao(10);
         request.setComentario("Excelente professor!");
         request.setVisibilidade("PÚBLICA");
 
@@ -68,10 +68,10 @@ class AvaliacaoProfessorControllerTest {
     void deveListarAvaliacoes() throws Exception {
         AvaliacaoProfessor avaliacao = new AvaliacaoProfessor();
         avaliacao.setProfessorId(1L);
-        avaliacao.setDidatica(5);
-        avaliacao.setQualidadeAula(4);
-        avaliacao.setFlexibilidade(3);
-        avaliacao.setOrganizacao(4);
+        avaliacao.setDidatica(8);
+        avaliacao.setQualidadeAula(9);
+        avaliacao.setFlexibilidade(7);
+        avaliacao.setOrganizacao(10);
         avaliacao.setComentario("Bom professor!");
         avaliacao.setVisibilidade("PÚBLICA");
 
@@ -80,7 +80,7 @@ class AvaliacaoProfessorControllerTest {
         mockMvc.perform(get("/avaliacoes/professor"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].comentario").value("Bom professor!"))
-                .andExpect(jsonPath("$[0].didatica").value(5));
+                .andExpect(jsonPath("$[0].didatica").value(8));
     }
 
     @Test
@@ -99,10 +99,10 @@ class AvaliacaoProfessorControllerTest {
     @DisplayName("Deve atualizar uma avaliação de professor e retornar 200 OK")
     void deveAtualizarAvaliacao() throws Exception {
         AvaliacaoProfessorUpdateDTO updateDTO = new AvaliacaoProfessorUpdateDTO();
-        updateDTO.setDidatica(4);
-        updateDTO.setQualidadeAula(5);
-        updateDTO.setFlexibilidade(4);
-        updateDTO.setOrganizacao(5);
+        updateDTO.setDidatica(7);
+        updateDTO.setQualidadeAula(9);
+        updateDTO.setFlexibilidade(8);
+        updateDTO.setOrganizacao(10);
         updateDTO.setComentario("Atualizado com sucesso!");
 
         doNothing().when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoProfessorUpdateDTO.class));
@@ -118,7 +118,7 @@ class AvaliacaoProfessorControllerTest {
     @DisplayName("Deve retornar 400 Bad Request quando atualização falhar")
     void deveFalharAtualizacao() throws Exception {
         AvaliacaoProfessorUpdateDTO updateDTO = new AvaliacaoProfessorUpdateDTO();
-        updateDTO.setDidatica(4);
+        updateDTO.setDidatica(12); // valor inválido para disparar exceção
 
         // Simula exceção ao atualizar
         doThrow(new AvaliacaoInvalidaException("Erro na atualização"))

@@ -43,10 +43,10 @@ class AvaliacaoCoordenadorControllerTest {
         String json = """
             {
               "coordenadorId": 1,
-              "transparencia": 5,
-              "interacaoAluno": 4,
-              "suporte": 5,
-              "organizacao": 4,
+              "transparencia": 9,
+              "interacaoAluno": 7,
+              "suporte": 8,
+              "organizacao": 6,
               "comentario": "Excelente coordenação!",
               "visibilidade": "PÚBLICA"
             }
@@ -68,10 +68,10 @@ class AvaliacaoCoordenadorControllerTest {
 
         AvaliacaoCoordenador avaliacao = new AvaliacaoCoordenador();
         avaliacao.setCoordenadorId(1L);
-        avaliacao.setTransparencia(5);
-        avaliacao.setInteracaoAluno(4);
-        avaliacao.setSuporte(5);
-        avaliacao.setOrganizacao(4);
+        avaliacao.setTransparencia(10);
+        avaliacao.setInteracaoAluno(8);
+        avaliacao.setSuporte(9);
+        avaliacao.setOrganizacao(7);
         avaliacao.setComentario("Muito bom!");
 
         when(service.listarAvaliacoes()).thenReturn(List.of(avaliacao));
@@ -88,10 +88,10 @@ class AvaliacaoCoordenadorControllerTest {
 
         AvaliacaoCoordenador avaliacao = new AvaliacaoCoordenador();
         avaliacao.setCoordenadorId(2L);
-        avaliacao.setTransparencia(4);
-        avaliacao.setInteracaoAluno(3);
-        avaliacao.setSuporte(4);
-        avaliacao.setOrganizacao(5);
+        avaliacao.setTransparencia(7);
+        avaliacao.setInteracaoAluno(6);
+        avaliacao.setSuporte(8);
+        avaliacao.setOrganizacao(9);
         avaliacao.setComentario("Bom desempenho!");
 
         when(service.listarPorCoordenador(2L)).thenReturn(List.of(avaliacao));
@@ -120,10 +120,10 @@ class AvaliacaoCoordenadorControllerTest {
 
         String jsonUpdate = """
             {
-              "transparencia": 4,
-              "interacaoAluno": 5,
-              "suporte": 4,
-              "organizacao": 5,
+              "transparencia": 8,
+              "interacaoAluno": 9,
+              "suporte": 7,
+              "organizacao": 10,
               "comentario": "Atualizado com sucesso!"
             }
             """;
@@ -144,7 +144,7 @@ class AvaliacaoCoordenadorControllerTest {
 
         String jsonUpdate = """
             {
-              "transparencia": 4
+              "transparencia": 11
             }
             """;
 
