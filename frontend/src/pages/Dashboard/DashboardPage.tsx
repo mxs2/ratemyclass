@@ -18,74 +18,63 @@ import {
   UserOutlined,
   LikeOutlined,
   DislikeOutlined,
-  CalendarOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { avaliacoesUsuarios } from '../../services/api/avaliacaoApi';
 import { salvarReacao } from '../../services/api/reacaoApi';
-
 import { Avaliacao, SampleItem } from '../../types/avaliacao';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
 
-const fieldsEvaluation = {
+const FIELDS = {
+  PROFESSOR: ['didatica', 'qualidadeAula', 'flexibilidade', 'organizacaoProfessor',],
+  DISCIPLINA: ['dificuldade', 'metodologia', 'conteudos', 'aplicabilidade'],
+  COORDENADOR: ['transparencia', 'interacaoAluno', 'suporte', 'organizacaoCoordenador',],
+};
+
+// Mapeia nomes técnicos → rótulos legíveis
+const FIELD_LABELS: Record<string, string> = {
+  didatica: 'Didática',
+  qualidadeAula: 'Qualidade',
+  flexibilidade: 'Flexibilidade',
+  organizacaoProfessor: 'Organização',
+
+  dificuldade: 'Dificuldade',
+  metodologia: 'Metodologia',
+  conteudos: 'Conteúdos',
+  aplicabilidade: 'Aplicabilidade',
+
+  transparencia: 'Transparência',
+  interacaoAluno: 'Interação',
+  suporte: 'Suporte',
+  organizacaoCoordenador: 'Organização',
+};
+
+const ICONS = {
   PROFESSOR: {
-    didatica: null,
-    qualidadeAula: null,
-    flexibilidade: null,
-    organizacaoProfessor: null,
-    comentario: null,
-    avaliacaoId: null,
-    nomeReferencia: null,
-    likes: null,
-    deslikes: null,
-    tipoAvaliacao: 'PROFESSOR',
+    icon: <TeamOutlined />,
+    color: 'rgb(79 163 203)',
+    bg: 'rgb(79 163 203 / 25%)',
   },
   DISCIPLINA: {
-    dificuldade: null,
-    metodologia: null,
-    conteudos: null,
-    aplicabilidade: null,
-    comentario: null,
-    avaliacaoId: null,
-    nomeReferencia: null,
-    likes: null,
-    deslikes: null,
-    tipoAvaliacao: 'DISCIPLINA',
+    icon: <BookOutlined />,
+    color: 'rgb(233 174 32)',
+    bg: 'rgb(255 213 120 / 30%)',
   },
   COORDENADOR: {
-    transparencia: null,
-    interacaoAluno: null,
-    suporte: null,
-    organizacaoCoordenador: null,
-    comentario: null,
-    avaliacaoId: null,
-    nomeReferencia: null,
-    likes: null,
-    deslikes: null,
-    tipoAvaliacao: 'COORDENADOR',
+    icon: <StarOutlined />,
+    color: 'rgb(230 86 126)',
+    bg: 'rgb(242 143 174 / 25%)',
   },
 };
 
-const refactorData = (data: Avaliacao[]): SampleItem[] => {
-  return data
-    .map((item) => {
-      const base = fieldsEvaluation[item.tipoAvaliacao];
-      if (!base) return null;
-
-      const campos = Object.keys(base).reduce((acc, key) => {
-        (acc as any)[key] = (item as any)[key] ?? (base as any)[key];
-        return acc;
-      }, {} as Record<string, any>);
-
-      return {
-        ...campos,
-        userReaction: item.userReaction ?? null
-      };
-    })
-    .filter(Boolean) as SampleItem[];
-};
+const refactorData = (data: Avaliacao[]): SampleItem[] =>
+  data.map((item, index) => ({
+    ...item,
+    userReaction: item.userReaction ?? null,
+    uid: `${item.avaliacaoId}-${index}`,
+  }));
 
 const DashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -95,12 +84,7 @@ const DashboardPage: React.FC = () => {
     setLoading(true);
     try {
       const data = await avaliacoesUsuarios.listarAvaliacoes();
-      const formatted = refactorData(data).map((item, index) => ({
-        ...item,
-        uid: `${item.avaliacaoId}-${index}`
-      }));
-
-      setSampleItems(formatted);
+      setSampleItems(refactorData(data));
     } catch (err) {
       console.error(err);
       message.error('Não foi possível carregar as avaliações dos alunos.');
@@ -113,8 +97,8 @@ const DashboardPage: React.FC = () => {
     fetchEvaluations();
   }, []);
 
-  const handleReaction = async (avaliacao: object, tipo: 'LIKE' | 'DISLIKE') => {
-    console.log('avaliacao', avaliacao);
+  /** === CURTIR / DESCURTIR === */
+  const handleReaction = async (avaliacao: SampleItem, tipo: 'LIKE' | 'DISLIKE') => {
     try {
       setSampleItems(prev =>
         prev.map(item => {
@@ -129,271 +113,121 @@ const DashboardPage: React.FC = () => {
 
           if (tipo === 'LIKE') {
             if (alreadyLiked) {
-              newLikes -= 1;
+              newLikes--;
               newReaction = null;
             } else {
-              newLikes += 1;
-              if (alreadyDisliked) newDislikes -= 1;
+              newLikes++;
+              if (alreadyDisliked) newDislikes--;
               newReaction = 'LIKE';
             }
           } else {
             if (alreadyDisliked) {
-              newDislikes -= 1;
+              newDislikes--;
               newReaction = null;
             } else {
-              newDislikes += 1;
-              if (alreadyLiked) newLikes -= 1;
+              newDislikes++;
+              if (alreadyLiked) newLikes--;
               newReaction = 'DISLIKE';
             }
           }
 
-          return {
-            ...item,
-            likes: newLikes,
-            deslikes: newDislikes,
-            userReaction: newReaction
-          };
+          return { ...item, likes: newLikes, deslikes: newDislikes, userReaction: newReaction };
         })
       );
 
-      console.log('chamaando');
-      const payload = {
-        avaliacaoId: avaliacao?.avaliacaoId,
-        tipoAvaliacao: avaliacao?.tipoAvaliacao,
-        tipoReacao: tipo
-      }
-      console.log('payload', payload);
-
-      await salvarReacao.cadastrarReacao(payload);
-
+      await salvarReacao.cadastrarReacao({
+        avaliacaoId: avaliacao.avaliacaoId,
+        tipoAvaliacao: avaliacao.tipoAvaliacao,
+        tipoReacao: tipo,
+      });
     } catch {
-      message.error("Não foi possível registrar sua reação.");
+      message.error('Não foi possível registrar sua reação.');
     }
   };
 
+  /** === ESTILO DOS BOTÕES === */
   const getButtonStyle = (item: SampleItem, tipo: 'LIKE' | 'DISLIKE') => {
-    const isSelected = item.userReaction === tipo;
-
-    if (isSelected) {
-      return {
-        backgroundColor: tipo === 'LIKE' ? '#7edb7e49' : '#8f2f2f38',
-        color: '#fff',
-        borderRadius: 6,
-        padding: '2px 8px',
-        transition: '0.25s',
-      };
-    }
+    const isActive = item.userReaction === tipo;
+    const baseColor = tipo === 'LIKE' ? '#52c41a' : '#f5222d';
+    const bg = tipo === 'LIKE' ? '#7edb7e49' : '#8f2f2f38';
 
     return {
-      color: '#555',
+      backgroundColor: isActive ? bg : undefined,
+      color: baseColor,
       borderRadius: 6,
       padding: '2px 8px',
       transition: '0.25s',
     };
   };
 
-  /** === Renderizador dinâmico conforme tipoAvaliacao === **/
+  /** === ITEM DE AVALIAÇÃO === */
   const renderEvaluationItem = (item: SampleItem) => {
+    const fields = FIELDS[item.tipoAvaliacao as keyof typeof FIELDS];
+    const iconData = ICONS[item.tipoAvaliacao as keyof typeof ICONS];
 
-    const commonStyle = { color: '#444', fontWeight: 500 };
-    const metricsStyle = {
-      display: 'flex',
-      gap: 16,
-      color: '#888',
-      fontSize: 13,
-      marginTop: 6,
-      flexWrap: 'wrap',
-    };
-
-    switch (item.tipoAvaliacao) {
-      case 'PROFESSOR':
-        return (
-          <List.Item key={item.uid}>
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  icon={<TeamOutlined />}
-                  style={{
-                    background: 'rgb(79 163 203 / 25%)',
-                    color: 'rgb(79 163 203)',
-                  }}
-                />
-              }
-              title={<Text strong>{item.nomeReferencia}</Text>}
-              description={
-                <>
-                  <div style={commonStyle}>{item.comentario}</div>
-                  <div style={metricsStyle}>
-                    <Text type="secondary">Didática: {item.didatica}</Text>
-                    <Text type="secondary">
-                      Qualidade: {item.qualidadeAula}
-                    </Text>
-                    <Text type="secondary">
-                      Flexibilidade: {item.flexibilidade}
-                    </Text>
-                    <Text type="secondary">
-                      Organização: {item.organizacaoProfessor}
-                    </Text>
-                  </div>
-                  <div style={{ marginTop: 6 }}>
-                    <Button
-                      type="text"
-                      icon={<LikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'LIKE'),
-                        color: '#52c41a'
-                      }}
-                      onClick={() => handleReaction(item, 'LIKE')}
-                    >
-                      {item.likes}
-                    </Button>
-                    <Button
-                      type="text"
-                      icon={<DislikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'DISLIKE'),
-                        color: '#f5222d'
-                      }}
-                      onClick={() => handleReaction(item, 'DISLIKE')}
-                    >
-                      {item.deslikes}
-                    </Button>
-                  </div>
-                </>
-              }
+    return (
+      <List.Item key={item.uid}>
+        <List.Item.Meta
+          avatar={
+            <Avatar
+              icon={iconData.icon}
+              style={{ background: iconData.bg, color: iconData.color }}
             />
-          </List.Item>
-        );
+          }
+          title={<Text strong>{item.nomeReferencia}</Text>}
+          description={
+            <>
 
-      case 'DISCIPLINA':
-        return (
-          <List.Item key={item.uid}>
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  icon={<BookOutlined />}
-                  style={{
-                    background: 'rgb(255 213 120 / 30%)',
-                    color: 'rgb(233 174 32)',
-                  }}
-                />
-              }
-              title={<Text strong>{item.nomeReferencia}</Text>}
-              description={
-                <>
-                  <div style={commonStyle}>{item.comentario}</div>
-                  <div style={metricsStyle}>
-                    <Text type="secondary">
-                      Dificuldade: {item.dificuldade}
-                    </Text>
-                    <Text type="secondary">
-                      Metodologia: {item.metodologia}
-                    </Text>
-                    <Text type="secondary">
-                      Conteúdos: {item.conteudos}
-                    </Text>
-                    <Text type="secondary">
-                      Aplicabilidade: {item.aplicabilidade}
-                    </Text>
-                  </div>
-                  <div style={{ marginTop: 6 }}>
-                    <Button
-                      type="text"
-                      icon={<LikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'LIKE'),
-                        color: '#52c41a'
-                      }}
-                      onClick={() => handleReaction(item, 'LIKE')}
-                    >
-                      {item.likes}
-                    </Button>
-                    <Button
-                      type="text"
-                      icon={<DislikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'DISLIKE'),
-                        color: '#f5222d'
-                      }}
-                      onClick={() => handleReaction(item, 'DISLIKE')}
-                    >
-                      {item.deslikes}
-                    </Button>
-                  </div>
-                </>
-              }
-            />
-          </List.Item>
-        );
+              {/* Comentário */}
+              <div style={{ color: '#444', fontWeight: 500 }}>{item.comentario}</div>
 
-      case 'COORDENADOR':
-        return (
-          <List.Item key={item.uid}>
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  icon={<StarOutlined />}
-                  style={{
-                    background: 'rgb(242 143 174 / 25%)',
-                    color: 'rgb(230 86 126)',
-                  }}
-                />
-              }
-              title={<Text strong>{item.nomeReferencia}</Text>}
-              description={
-                <>
-                  <div style={commonStyle}>{item.comentario}</div>
-                  <div style={metricsStyle}>
-                    <Text type="secondary">
-                      Transparência: {item.transparencia}
-                    </Text>
-                    <Text type="secondary">
-                      Interação: {item.interacaoAluno}
-                    </Text>
-                    <Text type="secondary">Suporte: {item.suporte}</Text>
-                    <Text type="secondary">
-                      Organização: {item.organizacaoCoordenador}
-                    </Text>
-                  </div>
-                  <div style={{ marginTop: 6 }}>
-                    <Button
-                      type="text"
-                      icon={<LikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'LIKE'),
-                        color: '#52c41a'
-                      }}
-                      onClick={() => handleReaction(item, 'LIKE')}
-                    >
-                      {item.likes}
-                    </Button>
-                    <Button
-                      type="text"
-                      icon={<DislikeOutlined />}
-                      style={{
-                        ...getButtonStyle(item, 'DISLIKE'),
-                        color: '#f5222d'
-                      }}
-                      onClick={() => handleReaction(item, 'DISLIKE')}
-                    >
-                      {item.deslikes}
-                    </Button>
-                  </div>
-                </>
-              }
-            />
-          </List.Item>
-        );
+              {/* Métricas */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 16,
+                  fontSize: 13,
+                  marginTop: 6
+                }}
+              >
+                {fields.map(key => (
+                  <Text type="secondary" key={key} style={{ color: '#888888ff' }}>
+                    {`${FIELD_LABELS[key] ?? key}: ${item[key] ?? '-'}`}
+                  </Text>
+                ))}
+              </div>
 
-      default:
-        return null;
-    }
+              {/* Reações */}
+              <div style={{ marginTop: 6 }}>
+                <Button
+                  type="text"
+                  icon={<LikeOutlined />}
+                  style={getButtonStyle(item, 'LIKE')}
+                  onClick={() => handleReaction(item, 'LIKE')}
+                >
+                  {item.likes}
+                </Button>
+                <Button
+                  type="text"
+                  icon={<DislikeOutlined />}
+                  style={getButtonStyle(item, 'DISLIKE')}
+                  onClick={() => handleReaction(item, 'DISLIKE')}
+                >
+                  {item.deslikes}
+                </Button>
+              </div>
+            </>
+          }
+        />
+      </List.Item>
+    );
   };
 
   return (
     <div style={{ background: '#f5f7fa', padding: 16, minHeight: '80vh' }}>
       <Row gutter={16}>
-        {/* --- Coluna lateral --- */}
+        {/* === Coluna lateral === */}
         <Col xs={24} lg={4}>
           <Card bordered={false} style={{ borderRadius: 8, height: '100%' }}>
             <List itemLayout="horizontal">
@@ -416,29 +250,17 @@ const DashboardPage: React.FC = () => {
                 <List size="small">
                   <List.Item>
                     <List.Item.Meta
-                      title={
-                        <Link to="/minhas-avaliacoes/professor">
-                          Professor
-                        </Link>
-                      }
+                      title={<Link to="/minhas-avaliacoes/professor">Professor</Link>}
                     />
                   </List.Item>
                   <List.Item>
                     <List.Item.Meta
-                      title={
-                        <Link to="/minhas-avaliacoes/disciplina">
-                          Disciplina
-                        </Link>
-                      }
+                      title={<Link to="/minhas-avaliacoes/disciplina">Disciplina</Link>}
                     />
                   </List.Item>
                   <List.Item>
                     <List.Item.Meta
-                      title={
-                        <Link to="/minhas-avaliacoes/coordenador">
-                          Coordenador
-                        </Link>
-                      }
+                      title={<Link to="/minhas-avaliacoes/coordenador">Coordenador</Link>}
                     />
                   </List.Item>
                 </List>
@@ -447,17 +269,11 @@ const DashboardPage: React.FC = () => {
           </Card>
         </Col>
 
-        {/* --- Coluna central --- */}
+        {/* === Coluna central === */}
         <Col xs={24} lg={14}>
           <Card style={{ borderRadius: 8 }}>
             {/* Header */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <Title level={4} style={{ margin: 0 }}>
                   Seja bem-vindo (a)
@@ -488,72 +304,49 @@ const DashboardPage: React.FC = () => {
                     marginTop: '8px',
                   }}
                 >
-                  <Link to="/avaliar-professor">
-                    <Card hoverable bodyStyle={{ padding: 16 }} style={{ borderRadius: 12, backgroundColor: '#f8f9fa' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar
-                          icon={<TeamOutlined />}
-                          style={{
-                            background: 'rgb(79 163 203 / 25%)',
-                            color: 'rgb(79 163 203)',
-                            marginRight: 12,
-                          }}
-                        />
-                        <div>
-                          <Text strong>Avaliar professor</Text>
-                          <div style={{ color: '#888', fontSize: 12 }}>
-                            Cursos, didática e organização
+                  {[
+                    {
+                      link: '/avaliar-professor',
+                      title: 'Avaliar professor',
+                      desc: 'Cursos, didática e organização',
+                      ...ICONS.PROFESSOR,
+                    },
+                    {
+                      link: '/avaliar-disciplina',
+                      title: 'Avaliar disciplina',
+                      desc: 'Ementa, carga e avaliação',
+                      ...ICONS.DISCIPLINA,
+                    },
+                    {
+                      link: '/avaliar-coordenador',
+                      title: 'Avaliar coordenador',
+                      desc: 'Gestão, transparência e respostas',
+                      ...ICONS.COORDENADOR,
+                    },
+                  ].map(card => (
+                    <Link to={card.link} key={card.title}>
+                      <Card
+                        hoverable
+                        bodyStyle={{ padding: 16 }}
+                        style={{
+                          borderRadius: 12,
+                          backgroundColor: '#f8f9fa',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <Avatar icon={card.icon} style={{ background: card.bg, color: card.color, marginRight: 12 }} />
+                          <div>
+                            <Text strong>{card.title}</Text>
+                            <div style={{ color: '#888', fontSize: 12 }}>{card.desc}</div>
                           </div>
                         </div>
-                      </div>
-                    </Card>
-                  </Link>
-
-                  <Link to="/avaliar-disciplina">
-                    <Card hoverable bodyStyle={{ padding: 16 }} style={{ borderRadius: 12, backgroundColor: '#f8f9fa' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar
-                          icon={<BookOutlined />}
-                          style={{
-                            background: 'rgb(255 213 120 / 30%)',
-                            color: 'rgb(233 174 32)',
-                            marginRight: 12,
-                          }}
-                        />
-                        <div>
-                          <Text strong>Avaliar disciplina</Text>
-                          <div style={{ color: '#888', fontSize: 12 }}>
-                            Ementa, carga e avaliação
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
-
-                  <Link to="/avaliar-coordenador">
-                    <Card hoverable bodyStyle={{ padding: 16 }} style={{ borderRadius: 12, backgroundColor: '#f8f9fa' }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar
-                          icon={<StarOutlined />}
-                          style={{
-                            background: 'rgb(242 143 174 / 25%)',
-                            color: 'rgb(230 86 126)',
-                            marginRight: 12,
-                          }}
-                        />
-                        <div>
-                          <Text strong>Avaliar coordenador</Text>
-                          <div style={{ color: '#888', fontSize: 12 }}>
-                            Gestão, transparência e respostas
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
+                      </Card>
+                    </Link>
+                  ))}
                 </div>
               </Card>
 
-              {/* === LISTA DE AVALIAÇÕES DINÂMICA === */}
+              {/* === Lista de avaliações === */}
               <Card type="inner" title="Todas as Avaliações">
                 <List
                   loading={loading}
@@ -566,29 +359,17 @@ const DashboardPage: React.FC = () => {
           </Card>
         </Col>
 
-        {/* --- Coluna direita --- */}
+        {/* === Coluna direita === */}
         <Col xs={24} lg={6}>
           <Card style={{ borderRadius: 8 }}>
             <Title level={5}>Minhas avaliações</Title>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 12,
-              }}
-            >
-              <div>
-                <Text type="secondary">Professores</Text>
-                <div style={{ fontSize: 18, fontWeight: 600 }}>10</div>
-              </div>
-              <div>
-                <Text type="secondary">Disciplinas</Text>
-                <div style={{ fontSize: 18, fontWeight: 600 }}>15</div>
-              </div>
-              <div>
-                <Text type="secondary">Coordenador</Text>
-                <div style={{ fontSize: 18, fontWeight: 600 }}>3</div>
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
+              {['Professores', 'Disciplinas', 'Coordenador'].map((label, i) => (
+                <div key={label}>
+                  <Text type="secondary">{label}</Text>
+                  <div style={{ fontSize: 18, fontWeight: 600 }}>{[10, 15, 3][i]}</div>
+                </div>
+              ))}
             </div>
             <Button type="link">Ver histórico</Button>
           </Card>
