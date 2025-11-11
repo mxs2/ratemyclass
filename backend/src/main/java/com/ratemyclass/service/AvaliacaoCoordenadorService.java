@@ -3,6 +3,7 @@ package com.ratemyclass.service;
 import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorRequestDTO;
 import com.ratemyclass.dto.avaliacao.AvaliacaoCoordenadorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoCoordenador;
+import com.ratemyclass.entity.User;
 import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.repository.AvaliacaoCoordenadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,13 @@ public class AvaliacaoCoordenadorService {
     @Autowired
     private AvaliacaoCoordenadorRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     public List<AvaliacaoCoordenador> listarAvaliacoes() {
-        return repository.findByActiveTrue();
+        var usuario = userService.getUsuarioAutenticado();
+
+        return repository.findByUsuarioAndActiveTrue(usuario);
     }
 
     public List<AvaliacaoCoordenador> listarPorCoordenador(Long coordenadorId) {
@@ -30,6 +36,8 @@ public class AvaliacaoCoordenadorService {
         validarCamposObrigatorios(request);
         validarNotas(request.getTransparencia(), request.getInteracaoAluno(), request.getSuporte(), request.getOrganizacao());
 
+        User usuario = userService.getUsuarioAutenticado();
+
         AvaliacaoCoordenador avaliacao = new AvaliacaoCoordenador();
         avaliacao.setCoordenadorId(request.getCoordenadorId());
         avaliacao.setTransparencia(request.getTransparencia());
@@ -39,6 +47,7 @@ public class AvaliacaoCoordenadorService {
         avaliacao.setComentario(request.getComentario());
         avaliacao.setVisibilidade(request.getVisibilidade());
         avaliacao.setActive(true);
+        avaliacao.setUsuario(usuario);
 
         repository.save(avaliacao);
     }

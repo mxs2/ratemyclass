@@ -17,20 +17,20 @@ const RegisterPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      
-      // Remove confirmPassword field before sending to API
+
+      // Remove confirmPassword antes de enviar ao backend
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
       const { confirmPassword, ...registerData } = values;
-      
-      // Register user (auto-login after successful registration)
+
+      // Registra o usuário (com login automático após o registro)
       await register(registerData);
-      
-      // Redirect to dashboard after successful registration
-      navigate('/dashboard', { 
-        state: { message: 'Welcome to RateMyClass! Your account has been created successfully.' } 
+
+      // Redireciona para o dashboard após registro bem-sucedido
+      navigate('/dashboard', {
+        state: { message: 'Bem-vindo ao RateMyClass! Sua conta foi criada com sucesso.' }
       });
     } catch (err: any) {
-      // Handle validation errors from backend
+      // Lida com erros de validação vindos do backend
       if (err.response?.data?.fieldErrors) {
         const backendErrors = err.response.data.fieldErrors;
         form.setFields(
@@ -40,7 +40,11 @@ const RegisterPage: React.FC = () => {
           }))
         );
       } else {
-        setError(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
+        setError(
+          err.response?.data?.message ||
+          err.message ||
+          'Falha no registro. Por favor, tente novamente.'
+        );
       }
     } finally {
       setLoading(false);
@@ -48,22 +52,22 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       minHeight: '80vh',
       padding: '20px'
     }}>
       <Card style={{ width: '100%', maxWidth: 500 }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Title level={2}>Join RateMyClass</Title>
-          <p>Create your account to start rating professors and courses</p>
+          <Title level={2}>Junte-se ao RateMyClass</Title>
+          <p>Crie sua conta para começar a avaliar professores e disciplinas</p>
         </div>
 
         {error && (
           <Alert
-            message="Registration Failed"
+            message="Falha no registro"
             description={error}
             type="error"
             showIcon
@@ -83,27 +87,27 @@ const RegisterPage: React.FC = () => {
             name="email"
             label="Email"
             rules={[
-              { required: true, message: 'Please enter your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
+              { required: true, message: 'Por favor, insira seu email!' },
+              { type: 'email', message: 'Insira um email válido!' }
             ]}
           >
-            <Input 
-              prefix={<MailOutlined />} 
-              placeholder="your.email@university.edu"
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="seu.email@universidade.edu"
               size="large"
             />
           </Form.Item>
 
           <Form.Item
             name="studentId"
-            label="Student ID"
+            label="Matrícula"
             rules={[
-              { required: true, message: 'Please enter your student ID!' },
-              { max: 20, message: 'Student ID cannot exceed 20 characters!' }
+              { required: true, message: 'Por favor, insira sua matrícula!' },
+              { max: 20, message: 'A matrícula não pode exceder 20 caracteres!' }
             ]}
           >
-            <Input 
-              placeholder="e.g., ST12345678"
+            <Input
+              placeholder="ex: ST12345678"
               size="large"
             />
           </Form.Item>
@@ -111,31 +115,31 @@ const RegisterPage: React.FC = () => {
           <div style={{ display: 'flex', gap: '12px' }}>
             <Form.Item
               name="firstName"
-              label="First Name"
+              label="Nome"
               style={{ flex: 1 }}
               rules={[
-                { required: true, message: 'Please enter your first name!' },
-                { max: 100, message: 'First name cannot exceed 100 characters!' }
+                { required: true, message: 'Por favor, insira seu nome!' },
+                { max: 100, message: 'Seu nome não pode exceder 100 caracteres!' }
               ]}
             >
-              <Input 
-                prefix={<UserOutlined />} 
-                placeholder="John"
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="João"
                 size="large"
               />
             </Form.Item>
 
             <Form.Item
               name="lastName"
-              label="Last Name"
+              label="Sobrenome"
               style={{ flex: 1 }}
               rules={[
-                { required: true, message: 'Please enter your last name!' },
-                { max: 100, message: 'Last name cannot exceed 100 characters!' }
+                { required: true, message: 'Por favor, insira seu sobrenome!' },
+                { max: 100, message: 'O sobrenome não pode exceder 100 caracteres!' }
               ]}
             >
-              <Input 
-                placeholder="Doe"
+              <Input
+                placeholder="Silva"
                 size="large"
               />
             </Form.Item>
@@ -143,39 +147,39 @@ const RegisterPage: React.FC = () => {
 
           <Form.Item
             name="password"
-            label="Password"
+            label="Senha"
             rules={[
-              { required: true, message: 'Please enter a password!' },
-              { min: 8, message: 'Password must be at least 8 characters!' },
-              { max: 255, message: 'Password cannot exceed 255 characters!' }
+              { required: true, message: 'Por favor, insira uma senha!' },
+              { min: 8, message: 'A senha deve ter pelo menos 8 caracteres!' },
+              { max: 255, message: 'A senha não pode exceder 255 caracteres!' }
             ]}
           >
-            <Input.Password 
-              prefix={<LockOutlined />} 
-              placeholder="Password (min 8 characters)"
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Senha (mínimo 8 caracteres)"
               size="large"
             />
           </Form.Item>
 
           <Form.Item
             name="confirmPassword"
-            label="Confirm Password"
+            label="Confirmar senha"
             dependencies={['password']}
             rules={[
-              { required: true, message: 'Please confirm your password!' },
+              { required: true, message: 'Por favor, confirme sua senha!' },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error('Passwords do not match!'));
+                  return Promise.reject(new Error('As senhas não coincidem!'));
                 },
               }),
             ]}
           >
-            <Input.Password 
-              prefix={<LockOutlined />} 
-              placeholder="Confirm Password"
+            <Input.Password
+              prefix={<LockOutlined />}
+              placeholder="Confirme sua senha"
               size="large"
             />
           </Form.Item>
@@ -183,24 +187,24 @@ const RegisterPage: React.FC = () => {
           <div style={{ display: 'flex', gap: '12px' }}>
             <Form.Item
               name="major"
-              label="Major (Optional)"
+              label="Curso (Opcional)"
               style={{ flex: 1 }}
               rules={[
-                { max: 100, message: 'Major cannot exceed 100 characters!' }
+                { max: 100, message: 'O curso não pode exceder 100 caracteres!' }
               ]}
             >
-              <Input 
-                placeholder="e.g., Computer Science"
+              <Input
+                placeholder="ex: Ciência da Computação"
                 size="large"
               />
             </Form.Item>
 
             <Form.Item
               name="graduationYear"
-              label="Graduation Year (Optional)"
+              label="Ano de conclusão (Opcional)"
               style={{ flex: 1 }}
             >
-              <InputNumber 
+              <InputNumber
                 placeholder="2025"
                 size="large"
                 style={{ width: '100%' }}
@@ -211,21 +215,21 @@ const RegisterPage: React.FC = () => {
           </div>
 
           <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
+            <Button
+              type="primary"
+              htmlType="submit"
               size="large"
               loading={loading}
               block
             >
-              {loading ? 'Creating your account...' : 'Create Account'}
+              {loading ? 'Criando conta...' : 'Criar conta'}
             </Button>
           </Form.Item>
         </Form>
 
         <div style={{ textAlign: 'center' }}>
           <p>
-            Already have an account? <Link to="/login">Sign in</Link>
+            Já tem uma conta? <Link to="/login">Entrar</Link>
           </p>
         </div>
       </Card>

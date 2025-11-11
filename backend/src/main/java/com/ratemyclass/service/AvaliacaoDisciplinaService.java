@@ -3,6 +3,7 @@ package com.ratemyclass.service;
 import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaRequestDTO;
 import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoDisciplina;
+import com.ratemyclass.entity.User;
 import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.repository.AvaliacaoDisciplinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,20 @@ public class AvaliacaoDisciplinaService {
     @Autowired
     private AvaliacaoDisciplinaRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     public List<AvaliacaoDisciplina> listarAvaliacoes() {
-        return repository.findByActiveTrue();
+        var usuario = userService.getUsuarioAutenticado();
+
+        return repository.findByUsuarioAndActiveTrue(usuario);
     }
 
     public void criarAvaliacao(AvaliacaoDisciplinaRequestDTO request) {
         validarCamposObrigatorios(request);
         validarNotas(request.getDificuldade(), request.getMetodologia(), request.getConteudos(), request.getAplicabilidade());
+
+        User usuario = userService.getUsuarioAutenticado();
 
         AvaliacaoDisciplina avaliacao = new AvaliacaoDisciplina();
         avaliacao.setDisciplinaId(request.getDisciplinaId());
@@ -35,6 +43,7 @@ public class AvaliacaoDisciplinaService {
         avaliacao.setComentario(request.getComentario());
         avaliacao.setVisibilidade(request.getVisibilidade());
         avaliacao.setActive(true);
+        avaliacao.setUsuario(usuario);
 
         repository.save(avaliacao);
     }

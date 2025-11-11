@@ -51,3 +51,10 @@ export const avaliacaoApiCoordenador = {
     return response.data;
   },
 };
+
+export const avaliacoesUsuarios = {
+  listarAvaliacoes: async () => {
+    const response = await api.get('/avaliacoes');
+    return response.data;
+  },
+}

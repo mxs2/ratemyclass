@@ -3,9 +3,13 @@ package com.ratemyclass.service;
 import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorRequestDTO;
 import com.ratemyclass.dto.avaliacao.AvaliacaoProfessorUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoProfessor;
+import com.ratemyclass.entity.User;
 import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.repository.AvaliacaoProfessorRepository;
+import com.ratemyclass.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,13 +22,20 @@ public class AvaliacaoProfessorService {
     @Autowired
     private AvaliacaoProfessorRepository repository;
 
+    @Autowired
+    private UserService userService;
+
     public List<AvaliacaoProfessor> listarAvaliacoes() {
-        return repository.findByActiveTrue();
+        var usuario = userService.getUsuarioAutenticado();
+
+        return repository.findByUsuarioAndActiveTrue(usuario);
     }
 
     public void criarAvaliacao(AvaliacaoProfessorRequestDTO request) {
         validarCamposObrigatorios(request);
         validarNotas(request.getDidatica(), request.getQualidadeAula(), request.getFlexibilidade(), request.getOrganizacao());
+
+        User usuario = userService.getUsuarioAutenticado();
 
         AvaliacaoProfessor avaliacao = new AvaliacaoProfessor();
         avaliacao.setProfessorId(request.getProfessorId());
@@ -35,6 +46,7 @@ public class AvaliacaoProfessorService {
         avaliacao.setComentario(request.getComentario());
         avaliacao.setVisibilidade(request.getVisibilidade());
         avaliacao.setActive(true);
+        avaliacao.setUsuario(usuario);
 
         repository.save(avaliacao);
     }

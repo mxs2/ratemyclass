@@ -42,3 +42,29 @@ export interface Coordenador {
   id: number;
   nome: string;
 }
+
+export interface Avaliacao {
+  avaliacaoId: number;
+  tipoAvaliacao: 'PROFESSOR' | 'DISCIPLINA' | 'COORDENADOR';
+  nomeReferencia: string;
+  comentario?: string;
+  likes?: number;
+  deslikes?: number;
+  didatica?: number;
+  qualidadeAula?: number;
+  flexibilidade?: number;
+  organizacaoProfessor?: number;
+  dificuldade?: number;
+  metodologia?: number;
+  conteudos?: number;
+  aplicabilidade?: number;
+  transparencia?: number;
+  interacaoAluno?: number;
+  suporte?: number;
+  organizacaoCoordenador?: number;
+  userReaction?: string;
+}
+
+export interface SampleItem {
+  [key: string]: any;
+}

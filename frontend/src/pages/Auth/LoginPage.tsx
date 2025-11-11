@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  // Get return URL from query params
+  // Obtém URL de retorno dos parâmetros da URL
   const returnUrl = searchParams.get('returnUrl') || '/dashboard';
 
   const handleSubmit = async (values: { email: string; password: string; remember?: boolean }) => {
@@ -23,10 +23,10 @@ const LoginPage: React.FC = () => {
       setError(null);
       await login(values);
 
-      // Navigate to return URL or dashboard
+      // Navega para a página de retorno ou dashboard
       navigate(returnUrl);
     } catch (err: any) {
-      // Handle validation errors from backend
+      // Tratamento de erros de validação vindos do backend
       if (err.response?.data?.fieldErrors) {
         const backendErrors = err.response.data.fieldErrors;
         form.setFields(
@@ -36,7 +36,11 @@ const LoginPage: React.FC = () => {
           }))
         );
       } else {
-        setError(err.response?.data?.message || err.message || 'Login failed. Please check your credentials.');
+        setError(
+          err.response?.data?.message ||
+          err.message ||
+          'Falha no login. Verifique suas credenciais.'
+        );
       }
     } finally {
       setLoading(false);
@@ -45,8 +49,8 @@ const LoginPage: React.FC = () => {
 
   const fillDemoCredentials = () => {
     form.setFieldsValue({
-      email: 'demo@university.edu',
-      password: 'Demo123!',
+      email: 'demo@cesar.school',
+      password: 'cesar123',
     });
   };
 
@@ -60,13 +64,13 @@ const LoginPage: React.FC = () => {
     }}>
       <Card style={{ width: '100%', maxWidth: 400 }}>
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Title level={2}>Welcome Back</Title>
-          <p>Sign in to your RateMyClass account</p>
+          <Title level={2}>Bem-vindo de volta</Title>
+          <p>Entre na sua conta RateMyClass</p>
         </div>
 
         {error && (
           <Alert
-            message="Login Failed"
+            message="Falha no login"
             description={error}
             type="error"
             showIcon
@@ -76,19 +80,19 @@ const LoginPage: React.FC = () => {
         )}
 
         <Alert
-          message="Demo Account"
+          message="Conta Demo"
           description={
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
-              <Text>Test the app with demo credentials:</Text>
-              <Text strong>Email: demo@university.edu</Text>
-              <Text strong>Password: Demo123!</Text>
+              <Text>Teste o app utilizando as credenciais demo:</Text>
+              <Text strong>Email: demo@cesar.school</Text>
+              <Text strong>Senha: cesar123</Text>
               <Button
                 size="small"
                 type="link"
                 onClick={fillDemoCredentials}
                 style={{ padding: 0 }}
               >
-                Click to auto-fill
+                Preencher automaticamente
               </Button>
             </Space>
           }
@@ -108,31 +112,31 @@ const LoginPage: React.FC = () => {
             name="email"
             label="Email"
             rules={[
-              { required: true, message: 'Please enter your email!' },
-              { type: 'email', message: 'Please enter a valid email!' }
+              { required: true, message: 'Por favor, insira seu email!' },
+              { type: 'email', message: 'Insira um email válido!' }
             ]}
           >
             <Input
               prefix={<UserOutlined />}
-              placeholder="your.email@university.edu"
+              placeholder="seu.email@universidade.edu"
               size="large"
             />
           </Form.Item>
 
           <Form.Item
             name="password"
-            label="Password"
-            rules={[{ required: true, message: 'Please enter your password!' }]}
+            label="Senha"
+            rules={[{ required: true, message: 'Por favor, insira sua senha!' }]}
           >
             <Input.Password
               prefix={<LockOutlined />}
-              placeholder="Password"
+              placeholder="Senha"
               size="large"
             />
           </Form.Item>
 
           <Form.Item name="remember" valuePropName="checked" style={{ marginBottom: 8 }}>
-            <Checkbox>Remember me for 30 days</Checkbox>
+            <Checkbox>Lembrar-me por 30 dias</Checkbox>
           </Form.Item>
 
           <Form.Item>
@@ -143,17 +147,17 @@ const LoginPage: React.FC = () => {
               loading={loading}
               block
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Entrando...' : 'Entrar'}
             </Button>
           </Form.Item>
         </Form>
 
         <div style={{ textAlign: 'center' }}>
           <p>
-            Don&apos;t have an account? <Link to="/register">Sign up</Link>
+            Não tem uma conta? <Link to="/register">Cadastre-se</Link>
           </p>
           <p>
-            <Link to="/forgot-password">Forgot your password?</Link>
+            <Link to="/forgot-password">Esqueceu a senha?</Link>
           </p>
         </div>
       </Card>
