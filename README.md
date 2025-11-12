@@ -19,7 +19,7 @@ A modern web application for students to rate and review professors and courses 
 ## Bug tracker
 [Bug tracker (closed issues)](https://github.com/mxs2/ratemyclass/issues?q=is%3Aissue%20state%3Aclosed)
 
-[![Bug tracker screenshot](https://raw.githubusercontent.com/mxs2/ratemyclass/main/docs/images/bug-tracker-10-27-2025.png)](https://raw.githubusercontent.com/mxs2/ratemyclass/main/docs/images/bug-tracker-10-27-2025.png)
+<img width="1143" height="719" alt="image" src="https://github.com/user-attachments/assets/155c4ea7-47b2-431b-8cdb-11dd8de3135f" />
 
 ## Links
 
