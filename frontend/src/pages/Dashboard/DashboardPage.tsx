@@ -22,7 +22,7 @@ import {
 import { Link } from 'react-router-dom';
 import { avaliacoesUsuarios } from '../../services/api/avaliacaoApi';
 import { salvarReacao } from '../../services/api/reacaoApi';
-import { Avaliacao, SampleItem } from '../../types/avaliacao';
+import { SampleItem } from '../../types/avaliacao';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -69,12 +69,32 @@ const ICONS = {
   },
 };
 
-const refactorData = (data: Avaliacao[]): SampleItem[] =>
-  data.map((item, index) => ({
-    ...item,
-    userReaction: item.userReaction ?? null,
-    uid: `${item.avaliacaoId}-${index}`,
-  }));
+const refactorData = (data: any[]): SampleItem[] =>
+  data.map((item, index) => {
+    // Detectar tipo de avaliação baseado nos campos presentes
+    let tipoAvaliacao = 'PROFESSOR';
+    let nomeReferencia = 'Avaliação';
+
+    if (item.disciplinaId) {
+      tipoAvaliacao = 'DISCIPLINA';
+      nomeReferencia = `Disciplina #${item.disciplinaId}`;
+    } else if (item.coordenadorId) {
+      tipoAvaliacao = 'COORDENADOR';
+      nomeReferencia = `Coordenador #${item.coordenadorId}`;
+    } else if (item.professorId) {
+      tipoAvaliacao = 'PROFESSOR';
+      nomeReferencia = `Professor #${item.professorId}`;
+    }
+
+    return {
+      ...item,
+      avaliacaoId: item.id || item.avaliacaoId,
+      tipoAvaliacao: item.tipoAvaliacao || tipoAvaliacao,
+      nomeReferencia: item.nomeReferencia || nomeReferencia,
+      userReaction: item.userReaction ?? null,
+      uid: `${item.id || item.avaliacaoId}-${index}`,
+    };
+  });
 
 const DashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);

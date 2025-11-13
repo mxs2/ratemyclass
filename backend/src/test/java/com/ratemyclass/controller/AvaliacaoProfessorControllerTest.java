@@ -57,8 +57,8 @@ class AvaliacaoProfessorControllerTest {
         doNothing().when(service).criarAvaliacao(any(AvaliacaoProfessorRequestDTO.class));
 
         mockMvc.perform(post("/avaliacoes/professor")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Avaliação para professor cadastrada com sucesso!"));
     }
@@ -81,6 +81,28 @@ class AvaliacaoProfessorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].comentario").value("Bom professor!"))
                 .andExpect(jsonPath("$[0].didatica").value(8));
+    }
+
+    @Test
+    @DisplayName("Deve buscar uma avaliação de professor por ID e retornar 200 OK")
+    void deveBuscarAvaliacaoPorId() throws Exception {
+        AvaliacaoProfessor avaliacao = new AvaliacaoProfessor();
+        avaliacao.setId(1L);
+        avaliacao.setProfessorId(1L);
+        avaliacao.setDidatica(8);
+        avaliacao.setQualidadeAula(9);
+        avaliacao.setFlexibilidade(7);
+        avaliacao.setOrganizacao(10);
+        avaliacao.setComentario("Excelente professor!");
+        avaliacao.setVisibilidade("PÚBLICA");
+
+        when(service.buscarPorId(1L)).thenReturn(avaliacao);
+
+        mockMvc.perform(get("/avaliacoes/professor/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.comentario").value("Excelente professor!"))
+                .andExpect(jsonPath("$.didatica").value(8));
     }
 
     @Test
@@ -108,8 +130,8 @@ class AvaliacaoProfessorControllerTest {
         doNothing().when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoProfessorUpdateDTO.class));
 
         mockMvc.perform(put("/avaliacoes/professor/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Avaliação atualizada com sucesso!"));
     }
@@ -125,8 +147,8 @@ class AvaliacaoProfessorControllerTest {
                 .when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoProfessorUpdateDTO.class));
 
         mockMvc.perform(put("/avaliacoes/professor/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateDTO)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Erro na atualização"));
     }

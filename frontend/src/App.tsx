@@ -18,6 +18,9 @@ import AvaliacaoCoordenadorPage from './pages/AvaliacaoCoordenador/AvaliacaoCoor
 import ProfessorEvaluationsPage from './pages/Evaluations/ProfessorEvaluationsPage';
 import DisciplinaEvaluationsPage from './pages/Evaluations/DisciplinaEvaluationsPage';
 import CoordenadorEvaluationsPage from './pages/Evaluations/CoordenadorEvaluationsPage';
+import UpdateProfessorEvaluationPage from './pages/Evaluations/UpdateProfessorEvaluationPage';
+import UpdateDisciplinaEvaluationPage from './pages/Evaluations/UpdateDisciplinaEvaluationPage';
+import UpdateCoordenadorEvaluationPage from './pages/Evaluations/UpdateCoordenadorEvaluationPage';
 
 
 const App: React.FC = () => {
@@ -114,6 +117,30 @@ const App: React.FC = () => {
         <AppLayout>
           <ProtectedRoute>
             <CoordenadorEvaluationsPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/editar-avaliacao/professor/:id" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <UpdateProfessorEvaluationPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/editar-avaliacao/disciplina/:id" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <UpdateDisciplinaEvaluationPage />
+          </ProtectedRoute>
+        </AppLayout>
+      } />
+
+      <Route path="/editar-avaliacao/coordenador/:id" element={
+        <AppLayout>
+          <ProtectedRoute>
+            <UpdateCoordenadorEvaluationPage />
           </ProtectedRoute>
         </AppLayout>
       } />

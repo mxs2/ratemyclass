@@ -3,9 +3,12 @@ package com.ratemyclass.service;
 import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaRequestDTO;
 import com.ratemyclass.dto.avaliacao.AvaliacaoDisciplinaUpdateDTO;
 import com.ratemyclass.entity.AvaliacaoDisciplina;
+import com.ratemyclass.entity.AvaliacaoReacao;
 import com.ratemyclass.entity.User;
 import com.ratemyclass.exception.avaliacao.AvaliacaoInvalidaException;
 import com.ratemyclass.repository.AvaliacaoDisciplinaRepository;
+import com.ratemyclass.repository.AvaliacaoReacaoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service
 public class AvaliacaoDisciplinaService {
 
@@ -22,15 +26,20 @@ public class AvaliacaoDisciplinaService {
     @Autowired
     private UserService userService;
 
-    public List<AvaliacaoDisciplina> listarAvaliacoes() {
-        var usuario = userService.getUsuarioAutenticado();
+    @Autowired
+    private AvaliacaoReacaoRepository avaliacaoReacaoRepository;
 
+    // LISTAR TODAS
+    public List<AvaliacaoDisciplina> listarAvaliacoes() {
+        User usuario = userService.getUsuarioAutenticado();
         return repository.findByUsuarioAndActiveTrue(usuario);
     }
 
+    // CRIAR
     public void criarAvaliacao(AvaliacaoDisciplinaRequestDTO request) {
         validarCamposObrigatorios(request);
-        validarNotas(request.getDificuldade(), request.getMetodologia(), request.getConteudos(), request.getAplicabilidade());
+        validarNotas(request.getDificuldade(), request.getMetodologia(), request.getConteudos(),
+                request.getAplicabilidade());
 
         User usuario = userService.getUsuarioAutenticado();
 
@@ -48,55 +57,38 @@ public class AvaliacaoDisciplinaService {
         repository.save(avaliacao);
     }
 
+    // DELETAR
     public void deletarAvaliacao(Long id) {
-        Optional<AvaliacaoDisciplina> avaliacaoOptional = repository.findById(id);
+        Optional<AvaliacaoDisciplina> avaliacaoOpt = repository.findById(id);
 
-        if (avaliacaoOptional.isEmpty()) {
+        if (avaliacaoOpt.isEmpty()) {
             throw new AvaliacaoInvalidaException("Avaliação de disciplina não encontrada para o ID: " + id);
         }
 
-        AvaliacaoDisciplina avaliacao = avaliacaoOptional.get();
+        AvaliacaoDisciplina avaliacao = avaliacaoOpt.get();
 
         if (!avaliacao.isActive()) {
             throw new AvaliacaoInvalidaException("A avaliação já foi desativada anteriormente.");
         }
 
+        avaliacaoReacaoRepository.deleteByAvaliacaoId(id);
         avaliacao.setActive(false);
         repository.save(avaliacao);
     }
 
-    private void validarCamposObrigatorios(AvaliacaoDisciplinaRequestDTO request) {
-        List<String> camposFaltando = new ArrayList<>();
+    // BUSCAR POR ID (NOVO)
+    public AvaliacaoDisciplina buscarPorId(Long id) {
+        Optional<AvaliacaoDisciplina> avaliacaoOpt = repository.findById(id);
 
-        if (request.getDisciplinaId() == null) camposFaltando.add("disciplinaId");
-        if (request.getDificuldade() == null) camposFaltando.add("dificuldade");
-        if (request.getMetodologia() == null) camposFaltando.add("metodologia");
-        if (request.getConteudos() == null) camposFaltando.add("conteudos");
-        if (request.getAplicabilidade() == null) camposFaltando.add("aplicabilidade");
-
-        if (!camposFaltando.isEmpty()) {
-            String message = "Campos obrigatórios estão vazios ou preenchidos incorretamente: "
-                    + String.join(", ", camposFaltando);
-            throw new AvaliacaoInvalidaException(message);
+        if (avaliacaoOpt.isEmpty() || !avaliacaoOpt.get().isActive()) {
+            throw new AvaliacaoInvalidaException(
+                    "Avaliação de disciplina não encontrada ou desativada para o ID: " + id);
         }
+
+        return avaliacaoOpt.get();
     }
 
-    private void validarNotas(Integer dificuldade, Integer metodologia, Integer conteudos, Integer aplicabilidade) {
-        if (dificuldade != null && (dificuldade < 0 || dificuldade > 10)) {
-            throw new AvaliacaoInvalidaException("Dificuldade deve ser entre 0 e 10.");
-        }
-        if (metodologia != null && (metodologia < 0 || metodologia > 10)) {
-            throw new AvaliacaoInvalidaException("Metodologia deve ser entre 0 e 10.");
-        }
-        if (conteudos != null && (conteudos < 0 || conteudos > 10)) {
-            throw new AvaliacaoInvalidaException("Conteúdos deve ser entre 0 e 10.");
-        }
-        if (aplicabilidade != null && (aplicabilidade < 0 || aplicabilidade > 10)) {
-            throw new AvaliacaoInvalidaException("Aplicabilidade deve ser entre 0 e 10.");
-        }
-    }
-
-    // ------------------- NOVO MÉTODO DE UPDATE -------------------
+    // UPDATE
     public void atualizarAvaliacao(Long id, AvaliacaoDisciplinaUpdateDTO request) {
         Optional<AvaliacaoDisciplina> avaliacaoOpt = repository.findById(id);
 
@@ -129,5 +121,42 @@ public class AvaliacaoDisciplinaService {
         repository.save(avaliacao);
 
         System.out.println("Avaliação ID " + id + " atualizada com sucesso.");
+    }
+
+    // VALIDAÇÕES
+    private void validarCamposObrigatorios(AvaliacaoDisciplinaRequestDTO request) {
+        List<String> camposFaltando = new ArrayList<>();
+
+        if (request.getDisciplinaId() == null)
+            camposFaltando.add("disciplinaId");
+        if (request.getDificuldade() == null)
+            camposFaltando.add("dificuldade");
+        if (request.getMetodologia() == null)
+            camposFaltando.add("metodologia");
+        if (request.getConteudos() == null)
+            camposFaltando.add("conteudos");
+        if (request.getAplicabilidade() == null)
+            camposFaltando.add("aplicabilidade");
+
+        if (!camposFaltando.isEmpty()) {
+            String message = "Campos obrigatórios estão vazios ou preenchidos incorretamente: "
+                    + String.join(", ", camposFaltando);
+            throw new AvaliacaoInvalidaException(message);
+        }
+    }
+
+    private void validarNotas(Integer dificuldade, Integer metodologia, Integer conteudos, Integer aplicabilidade) {
+        if (dificuldade != null && (dificuldade < 0 || dificuldade > 10)) {
+            throw new AvaliacaoInvalidaException("Dificuldade deve ser entre 0 e 10.");
+        }
+        if (metodologia != null && (metodologia < 0 || metodologia > 10)) {
+            throw new AvaliacaoInvalidaException("Metodologia deve ser entre 0 e 10.");
+        }
+        if (conteudos != null && (conteudos < 0 || conteudos > 10)) {
+            throw new AvaliacaoInvalidaException("Conteúdos deve ser entre 0 e 10.");
+        }
+        if (aplicabilidade != null && (aplicabilidade < 0 || aplicabilidade > 10)) {
+            throw new AvaliacaoInvalidaException("Aplicabilidade deve ser entre 0 e 10.");
+        }
     }
 }

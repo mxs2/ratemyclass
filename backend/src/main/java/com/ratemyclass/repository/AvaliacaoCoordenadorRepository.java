@@ -14,4 +14,6 @@ public interface AvaliacaoCoordenadorRepository extends JpaRepository<AvaliacaoC
     List<AvaliacaoCoordenador> findByCoordenadorIdAndActiveTrue(Long coordenadorId);
 
     List<AvaliacaoCoordenador> findByUsuarioAndActiveTrue(User usuario);
+
+    List<AvaliacaoCoordenador> findAllByActiveTrue();
 }

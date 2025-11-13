@@ -33,4 +33,6 @@ public interface AvaliacaoReacaoRepository extends JpaRepository<AvaliacaoReacao
               AND r.tipoReacao = com.ratemyclass.entity.enums.TipoReacao.DISLIKE
             """)
     Long countDeslikes(Long avaliacaoId, TipoAvaliacao tipoAvaliacao);
+
+    void deleteByAvaliacaoId(Long avaliacaoId);
 }

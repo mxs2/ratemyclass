@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography } from 'antd';
 import { DeleteOutlined, EditOutlined, CalendarOutlined, BookOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { avaliacaoApiDisciplina } from '../../services/api/avaliacaoApi';
 
 const { Title, Text } = Typography;
@@ -77,7 +78,9 @@ const DisciplinaEvaluationsPage: React.FC = () => {
             <List.Item
                 actions={[
                     <Tooltip key={`edit-${item.id}`} title="Editar">
-                        <EditOutlined style={{ fontSize: 16 }} />
+                        <Link to={`/editar-avaliacao/disciplina/${item.id}`}>
+                            <EditOutlined style={{ fontSize: 16 }} />
+                        </Link>
                     </Tooltip>,
                     <Popconfirm
                         key={`del-${item.id}`}

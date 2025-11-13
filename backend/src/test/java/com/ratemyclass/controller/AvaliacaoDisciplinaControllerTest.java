@@ -40,16 +40,16 @@ class AvaliacaoDisciplinaControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         String json = """
-            {
-              "disciplinaId": 1,
-              "dificuldade": 8,
-              "metodologia": 9,
-              "conteudos": 7,
-              "aplicabilidade": 10,
-              "comentario": "Excelente disciplina!",
-              "visibilidade": "PÚBLICA"
-            }
-            """;
+                {
+                  "disciplinaId": 1,
+                  "dificuldade": 8,
+                  "metodologia": 9,
+                  "conteudos": 7,
+                  "aplicabilidade": 10,
+                  "comentario": "Excelente disciplina!",
+                  "visibilidade": "PÚBLICA"
+                }
+                """;
 
         doNothing().when(service).criarAvaliacao(any(AvaliacaoDisciplinaRequestDTO.class));
 
@@ -81,6 +81,27 @@ class AvaliacaoDisciplinaControllerTest {
     }
 
     @Test
+    @DisplayName("Deve buscar uma avaliação de disciplina por ID e retornar 200 OK")
+    void deveBuscarAvaliacaoPorId() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
+        AvaliacaoDisciplina avaliacao = new AvaliacaoDisciplina();
+        avaliacao.setDisciplinaId(1L);
+        avaliacao.setDificuldade(8);
+        avaliacao.setMetodologia(9);
+        avaliacao.setConteudos(7);
+        avaliacao.setAplicabilidade(10);
+        avaliacao.setComentario("Disciplina específica");
+
+        when(service.buscarPorId(1L)).thenReturn(avaliacao);
+
+        mockMvc.perform(get("/avaliacoes/disciplina/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.comentario").value("Disciplina específica"))
+                .andExpect(jsonPath("$.dificuldade").value(8));
+    }
+
+    @Test
     @DisplayName("Deve deletar uma avaliação de disciplina e retornar 200 OK")
     void deveDeletarAvaliacaoDisciplina() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
@@ -98,14 +119,14 @@ class AvaliacaoDisciplinaControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         String jsonUpdate = """
-            {
-              "dificuldade": 6,
-              "metodologia": 8,
-              "conteudos": 7,
-              "aplicabilidade": 9,
-              "comentario": "Atualizado com sucesso!"
-            }
-            """;
+                {
+                  "dificuldade": 6,
+                  "metodologia": 8,
+                  "conteudos": 7,
+                  "aplicabilidade": 9,
+                  "comentario": "Atualizado com sucesso!"
+                }
+                """;
 
         doNothing().when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoDisciplinaUpdateDTO.class));
 
@@ -122,12 +143,11 @@ class AvaliacaoDisciplinaControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
         String jsonUpdate = """
-            {
-              "dificuldade": 12
-            }
-            """;
+                {
+                  "dificuldade": 12
+                }
+                """;
 
-        // Simula exceção lançada pelo service
         doThrow(new AvaliacaoInvalidaException("Avaliação não encontrada ou já desativada."))
                 .when(service).atualizarAvaliacao(any(Long.class), any(AvaliacaoDisciplinaUpdateDTO.class));
 

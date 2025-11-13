@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, List, Avatar, Tooltip, Popconfirm, message, Spin, Typography } from 'antd';
 import { DeleteOutlined, EditOutlined, CalendarOutlined, TeamOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { avaliacaoApiCoordenador } from '../../services/api/avaliacaoApi';
 
 const { Title, Text } = Typography;
@@ -19,10 +20,11 @@ interface Evaluation {
 }
 
 const coordenadores = [
-    { id: 1, nome: 'Maria Eduarda Santos' },
-    { id: 2, nome: 'Carlos Henrique Silva' },
-    { id: 3, nome: 'Fernanda Lima' },
-    { id: 4, nome: 'Rafael Costa' },
+    { id: 1, nome: 'Carla Alexandre' },
+    { id: 2, nome: 'Diocleciano Dantas Neto' },
+    { id: 3, nome: 'Gabrielle Canalle' },
+    { id: 4, nome: 'Eduardo Ariel' },
+    { id: 5, nome: 'José Augusto Suruagy Monteiro' },
 ];
 
 const CoordenadorEvaluationsPage: React.FC = () => {
@@ -76,7 +78,9 @@ const CoordenadorEvaluationsPage: React.FC = () => {
             <List.Item
                 actions={[
                     <Tooltip key={`edit-${item.id}`} title="Editar">
-                        <EditOutlined style={{ fontSize: 16 }} />
+                        <Link to={`/editar-avaliacao/coordenador/${item.id}`}>
+                            <EditOutlined style={{ fontSize: 16 }} />
+                        </Link>
                     </Tooltip>,
                     <Popconfirm
                         key={`del-${item.id}`}

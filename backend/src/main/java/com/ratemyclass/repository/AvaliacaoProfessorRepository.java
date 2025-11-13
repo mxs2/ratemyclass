@@ -11,4 +11,6 @@ public interface AvaliacaoProfessorRepository extends JpaRepository<AvaliacaoPro
     List<AvaliacaoProfessor> findByActiveTrue();
 
     List<AvaliacaoProfessor> findByUsuarioAndActiveTrue(User usuario);
+
+    List<AvaliacaoProfessor> findAllByActiveTrue();
 }

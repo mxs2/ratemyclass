@@ -45,4 +45,10 @@ public class AvaliacaoCoordenador {
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     @JsonIgnore
     private User usuario;
+
+    // ---------------------- GETTER TRANSIENT ----------------------
+    @Transient
+    public String getNomeUsuario() {
+        return usuario != null ? usuario.getUsername() : null;
+    }
 }

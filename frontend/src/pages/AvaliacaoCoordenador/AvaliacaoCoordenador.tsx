@@ -6,10 +6,11 @@ import type { AvaliacaoCoordenador } from '../../types/avaliacao';
 import './styles.css';
 
 const coordenadores = [
-  { id: 1, nome: 'Maria Eduarda Santos' },
-  { id: 2, nome: 'Carlos Henrique Silva' },
-  { id: 3, nome: 'Fernanda Lima' },
-  { id: 4, nome: 'Rafael Costa' },
+  { id: 1, nome: 'Carla Alexandre' },
+  { id: 2, nome: 'Diocleciano Dantas Neto' },
+  { id: 3, nome: 'Gabrielle Canalle' },
+  { id: 4, nome: 'Eduardo Ariel' },
+  { id: 5, nome: 'José Augusto Suruagy Monteiro' },
 ];
 
 const AvaliacaoCoordenadorPage: React.FC = () => {
