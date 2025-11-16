@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom';
 import { avaliacoesUsuarios } from '../../services/api/avaliacaoApi';
 import { salvarReacao } from '../../services/api/reacaoApi';
 import { SampleItem } from '../../types/avaliacao';
+import { useAuth } from '../../hooks/useAuth';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -33,7 +34,6 @@ const FIELDS = {
   COORDENADOR: ['transparencia', 'interacaoAluno', 'suporte', 'organizacaoCoordenador',],
 };
 
-// Mapeia nomes técnicos → rótulos legíveis
 const FIELD_LABELS: Record<string, string> = {
   didatica: 'Didática',
   qualidadeAula: 'Qualidade',
@@ -71,7 +71,6 @@ const ICONS = {
 
 const refactorData = (data: any[]): SampleItem[] =>
   data.map((item, index) => {
-    // Detectar tipo de avaliação baseado nos campos presentes
     let tipoAvaliacao = 'PROFESSOR';
     let nomeReferencia = 'Avaliação';
 
@@ -97,14 +96,31 @@ const refactorData = (data: any[]): SampleItem[] =>
   });
 
 const DashboardPage: React.FC = () => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [sampleItems, setSampleItems] = useState<SampleItem[]>([]);
+  const [filter, setFilter] = useState<string>('todos');
+
+  const primeiroNome = user?.firstName?.split(' ')[0] || '';
 
   const fetchEvaluations = async () => {
     setLoading(true);
     try {
       const data = await avaliacoesUsuarios.listarAvaliacoes();
-      setSampleItems(refactorData(data));
+      const refactored = refactorData(data);
+      const sorted = refactored.sort((a, b) => {
+        const dateA = a.dataAvaliacao || a.createdAt || a.timestamp || a.data;
+        const dateB = b.dataAvaliacao || b.createdAt || b.timestamp || b.data;
+        
+        if (dateA && dateB) {
+          return new Date(dateB).getTime() - new Date(dateA).getTime();
+        }
+        
+        const idA = a.id || a.avaliacaoId || 0;
+        const idB = b.id || b.avaliacaoId || 0;
+        return idB - idA;
+      });
+      setSampleItems(sorted);
     } catch (err) {
       console.error(err);
       message.error('Não foi possível carregar as avaliações dos alunos.');
@@ -117,7 +133,6 @@ const DashboardPage: React.FC = () => {
     fetchEvaluations();
   }, []);
 
-  /** === CURTIR / DESCURTIR === */
   const handleReaction = async (avaliacao: SampleItem, tipo: 'LIKE' | 'DISLIKE') => {
     try {
       setSampleItems(prev =>
@@ -165,7 +180,6 @@ const DashboardPage: React.FC = () => {
     }
   };
 
-  /** === ESTILO DOS BOTÕES === */
   const getButtonStyle = (item: SampleItem, tipo: 'LIKE' | 'DISLIKE') => {
     const isActive = item.userReaction === tipo;
     const baseColor = tipo === 'LIKE' ? '#52c41a' : '#f5222d';
@@ -180,7 +194,11 @@ const DashboardPage: React.FC = () => {
     };
   };
 
-  /** === ITEM DE AVALIAÇÃO === */
+  const filteredSampleItems = sampleItems.filter(item => {
+    if (filter === 'todos') return true;
+    return item.tipoAvaliacao.toLowerCase() === filter.toLowerCase();
+  });
+
   const renderEvaluationItem = (item: SampleItem) => {
     const fields = FIELDS[item.tipoAvaliacao as keyof typeof FIELDS];
     const iconData = ICONS[item.tipoAvaliacao as keyof typeof ICONS];
@@ -197,11 +215,8 @@ const DashboardPage: React.FC = () => {
           title={<Text strong>{item.nomeReferencia}</Text>}
           description={
             <>
-
-              {/* Comentário */}
               <div style={{ color: '#444', fontWeight: 500 }}>{item.comentario}</div>
 
-              {/* Métricas */}
               <div
                 style={{
                   display: 'flex',
@@ -218,7 +233,6 @@ const DashboardPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* Reações */}
               <div style={{ marginTop: 6 }}>
                 <Button
                   type="text"
@@ -247,9 +261,8 @@ const DashboardPage: React.FC = () => {
   return (
     <div style={{ background: '#f5f7fa', padding: 16, minHeight: '80vh' }}>
       <Row gutter={16}>
-        {/* === Coluna lateral === */}
         <Col xs={24} lg={4}>
-          <Card bordered={false} style={{ borderRadius: 8, height: '100%' }}>
+          <Card style={{ borderRadius: 8, height: '100%' }}>
             <List itemLayout="horizontal">
               <List.Item>
                 <List.Item.Meta
@@ -289,22 +302,24 @@ const DashboardPage: React.FC = () => {
           </Card>
         </Col>
 
-        {/* === Coluna central === */}
         <Col xs={24} lg={14}>
           <Card style={{ borderRadius: 8 }}>
-            {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <Title level={4} style={{ margin: 0 }}>
-                  Seja bem-vindo (a)
+                  Seja bem-vindo (a){primeiroNome && `, ${primeiroNome}`}
                 </Title>
                 <Text type="secondary">
                   Use o painel abaixo para cadastrar e visualizar avaliações
                 </Text>
               </div>
               <Space>
-                <Button type="link">Filtros</Button>
-                <Select defaultValue="todos" style={{ width: 160 }}>
+                <Button type="link">Filtro</Button>
+                <Select 
+                  value={filter} 
+                  onChange={setFilter} 
+                  style={{ width: 160 }}
+                >
                   <Option value="todos">Todos</Option>
                   <Option value="professor">Professor</Option>
                   <Option value="disciplina">Disciplina</Option>
@@ -313,7 +328,6 @@ const DashboardPage: React.FC = () => {
               </Space>
             </div>
 
-            {/* Cadastrar avaliações */}
             <div style={{ marginTop: 16 }}>
               <Card type="inner" title="Cadastrar avaliações" style={{ marginBottom: 16 }}>
                 <div
@@ -340,14 +354,14 @@ const DashboardPage: React.FC = () => {
                     {
                       link: '/avaliar-coordenador',
                       title: 'Avaliar coordenador',
-                      desc: 'Gestão, transparência e respostas',
+                      desc: 'Gestão e comunicação',
                       ...ICONS.COORDENADOR,
                     },
                   ].map(card => (
                     <Link to={card.link} key={card.title}>
                       <Card
                         hoverable
-                        bodyStyle={{ padding: 16 }}
+                        styles={{ body: { padding: 16 } }}
                         style={{
                           borderRadius: 12,
                           backgroundColor: '#f8f9fa',
@@ -366,12 +380,11 @@ const DashboardPage: React.FC = () => {
                 </div>
               </Card>
 
-              {/* === Lista de avaliações === */}
               <Card type="inner" title="Todas as Avaliações">
                 <List
                   loading={loading}
                   itemLayout="vertical"
-                  dataSource={sampleItems}
+                  dataSource={filteredSampleItems}
                   renderItem={renderEvaluationItem}
                 />
               </Card>
@@ -379,19 +392,21 @@ const DashboardPage: React.FC = () => {
           </Card>
         </Col>
 
-        {/* === Coluna direita === */}
         <Col xs={24} lg={6}>
           <Card style={{ borderRadius: 8 }}>
-            <Title level={5}>Minhas avaliações</Title>
+            <Title level={5}>Seus dados de rating</Title>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-              {['Professores', 'Disciplinas', 'Coordenador'].map((label, i) => (
-                <div key={label}>
-                  <Text type="secondary">{label}</Text>
-                  <div style={{ fontSize: 18, fontWeight: 600 }}>{[10, 15, 3][i]}</div>
-                </div>
-              ))}
+              {['Professores', 'Disciplinas', 'Coordenador'].map((label, i) => {
+                const tipos = ['PROFESSOR', 'DISCIPLINA', 'COORDENADOR'];
+                const count = sampleItems.filter(item => item.tipoAvaliacao === tipos[i]).length;
+                return (
+                  <div key={label}>
+                    <Text type="secondary">{label}</Text>
+                    <div style={{ fontSize: 18, fontWeight: 600 }}>{count}</div>
+                  </div>
+                );
+              })}
             </div>
-            <Button type="link">Ver histórico</Button>
           </Card>
         </Col>
       </Row>

@@ -36,7 +36,15 @@ const CoordenadorEvaluationsPage: React.FC = () => {
         setLoading(true);
         try {
             const data = await avaliacaoApiCoordenador.listarAvaliacoes();
-            setItems(data);
+            const sorted = data.sort((a: Evaluation, b: Evaluation) => {
+                const dateA = a.createdAt || '';
+                const dateB = b.createdAt || '';
+                if (dateA && dateB) {
+                    return new Date(dateB).getTime() - new Date(dateA).getTime();
+                }
+                return (b.id || 0) - (a.id || 0);
+            });
+            setItems(sorted);
         } catch (err) {
             console.error(err);
             message.error('Não foi possível carregar as avaliações de coordenador.');
