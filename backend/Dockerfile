@@ -1,5 +1,5 @@
 # Backend Dockerfile
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy
 
 # Set working directory
 WORKDIR /app
@@ -22,7 +22,7 @@ COPY backend/src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Create final image
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
