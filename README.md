@@ -30,7 +30,7 @@ A modern web application for students to rate and review professors and courses 
 - [YouTube](https://youtu.be/_Jk1oFpy5wU) -  Screencast HUs (Entrega 3) 
 - [YouTube](https://youtu.be/mW9EzpxDMXs) - Screencast Teste (Entrega 3)
 - [YouTube](https://youtu.be/qf3ULLbv0nw) - Screencast HUs (Entrega 4)
-
+- [YouTube](https://youtu.be/aZhTdSs2Wp8) - Screencast Teste (Entrega 4)
   
 ## Features
 
