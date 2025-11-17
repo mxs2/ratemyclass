@@ -29,7 +29,9 @@ A modern web application for students to rate and review professors and courses 
 - [YouTube](https://youtu.be/IOHdonVIenQ) - Project presentation (Entrega 2)
 - [YouTube](https://youtu.be/_Jk1oFpy5wU) -  Screencast HUs (Entrega 3) 
 - [YouTube](https://youtu.be/mW9EzpxDMXs) - Screencast Teste (Entrega 3)
+- [YouTube](https://youtu.be/qf3ULLbv0nw) - Screencast HUs (Entrega 4)
 
+  
 ## Features
 
 - **HU-001** https://trello.com/c/zAmOcMLL
@@ -221,7 +223,7 @@ Once the backend is running, access the interactive API documentation:
 
 #### Authentication
 - `POST /api/v1/auth/login` - User login
-- `POST /api/v1/auth/register` - User registration
+- `POST /api/v1/auth/register` - User registro
 - `POST /api/v1/auth/logout` - User logout
 
 #### Disciplinas
@@ -234,9 +236,10 @@ Once the backend is running, access the interactive API documentation:
 - `GET /coordenadores` - Lista coordenadores
 
 #### Avaliações
-- `POST /avaliacoes/professor` - Avaliação Professor
-- `POST /avaliacoes/coordenador` - Avaliação Coordenador
-- `POST /avaliacoes/disciplina` - Avaliação Disciplina
+- `GET | POST | UPDATE | DELETE /avaliacoes/professor` - Avaliação Professor
+- `GET | POST | UPDATE | DELETE /avaliacoes/coordenador` - Avaliação Coordenador
+- `GET | POST | UPDATE | DELETE /avaliacoes/disciplina` - Avaliação Disciplina
+-  `GET /avaliacoes` - Avaliações de todos os usuários
 
 ### Logs and Debugging
 
@@ -273,9 +276,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## Tables
+## Tabelas
 
-**Registro de avaliações:**
+**Registro de usuários cadastrados**
+- users
+  
+**Registro de avaliações**
 - avaliacao_coordenador
 - avaliacao_professor
 - avaliacao_disciplina
@@ -284,5 +290,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - coordenadores
 - professores
 - disciplinas
+
+**Registro de reações(likes/deslikes) por usuário**
+- avaliacao_reacao
 
 **Star this repository if you find it helpful!**
